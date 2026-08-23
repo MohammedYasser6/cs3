@@ -22,11 +22,12 @@ const COURSES = [
         available: true,
         reqLevel: 1,
       },
+      // FIX THIS LINE:
       {
         id: "binary",
         title: "Binary & Bitwise",
-        path: "#",
-        available: false,
+        path: "/binary",
+        available: true,
         reqLevel: 1,
       },
       {
