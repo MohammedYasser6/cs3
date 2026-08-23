@@ -96,7 +96,7 @@ export default function GraphsQuizPage() {
               </Link>
             )}
             <Link
-              href="/sorting"
+              href="/recursion"
               className="block w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded font-bold transition border border-slate-700"
             >
               Return to Dashboard

@@ -97,7 +97,7 @@ export default function TwoDArraysQuizPage() {
               </Link>
             )}
             <Link
-              href="/"
+              href="/linked-list"
               className="block w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded font-bold transition border border-slate-700"
             >
               Return to Dashboard

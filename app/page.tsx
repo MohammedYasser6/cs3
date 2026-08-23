@@ -119,8 +119,8 @@ const COURSES = [
       {
         id: "recursion",
         title: "Recursion & Call Stack",
-        path: "#",
-        available: false,
+        path: "/recursion",
+        available: true,
         reqLevel: 4,
       },
       {
