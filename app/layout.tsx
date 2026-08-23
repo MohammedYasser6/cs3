@@ -1,13 +1,11 @@
 "use client";
 
 import "./globals.css";
-// 1. Import optimized fonts
 import { Inter, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import { useStore } from "../store/useStore";
 import { useEffect, useState } from "react";
 
-// 2. Configure the fonts
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -26,200 +24,72 @@ export default function RootLayout({
     setIsMounted(true);
   }, []);
 
-  const isLevel2 = level >= 2;
-  const isLevel3 = level >= 3;
-  const isLevel4 = level >= 4;
+  // Calculate global progress
+  const totalAvailableModules = 9; // Adjust as we add more
+  const progressPercentage = Math.round(
+    (completedModules.length / totalAvailableModules) * 100,
+  );
 
   return (
-    // 3. Apply the fonts globally to the HTML tag
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}
     >
-      <body className="flex h-screen w-screen overflow-hidden bg-slate-950 selection:bg-blue-500 selection:text-white">
-        {/* SIDEBAR - Added animate-slide-up and subtle gradients */}
-        <aside className="w-72 bg-slate-900 border-r border-slate-800 flex flex-col relative z-20 shadow-2xl animate-fade-in">
-          <div className="p-6 border-b border-slate-800 bg-gradient-to-b from-slate-800/50 to-transparent">
-            <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <span className="text-blue-500">CS</span> 3D Vis
-            </h1>
-            <p className="text-slate-400 text-sm mt-1">
-              Interactive Encyclopedia
-            </p>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-8 custom-scrollbar">
-            {isMounted && (
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-inner animate-slide-up">
-                <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">
-                  Your Progress
-                </p>
-                <div className="flex justify-between items-end mb-2">
-                  <p className="text-2xl font-bold text-white">Level {level}</p>
-                  <p className="text-blue-400 font-medium text-sm">{xp} XP</p>
-                </div>
-                <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-blue-500 transition-all duration-1000 ease-out"
-                    style={{ width: `${xp % 100}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            <nav
-              className="flex flex-col gap-6 animate-slide-up"
-              style={{ animationDelay: "0.1s" }}
+      <body className="flex flex-col h-screen w-screen overflow-hidden bg-slate-950 selection:bg-blue-500 selection:text-white">
+        {/* GLOBAL TOP NAVBAR */}
+        <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 z-50 shadow-md">
+          <div className="flex items-center gap-8">
+            <Link
+              href="/"
+              className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2 hover:opacity-80 transition"
             >
-              <div>
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-3">
-                  Tier 0: Fundamentals
-                </h3>
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href="/hardware"
-                    className={`rounded p-3 transition border block ${completedModules.includes("hardware") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-slate-300 border-transparent"}`}
-                  >
-                    1. Hardware & Memory{" "}
-                    {completedModules.includes("hardware") && "✓"}
-                  </Link>
-                  <Link
-                    href="/programming"
-                    className={`rounded p-3 transition border block ${completedModules.includes("programming") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-slate-300 border-transparent"}`}
-                  >
-                    2. Programming 101{" "}
-                    {completedModules.includes("programming") && "✓"}
-                  </Link>
-                </div>
-              </div>
+              <span className="text-blue-500">CS</span> 3D Vis
+            </Link>
 
-              <div>
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-3">
-                  Tier 1: Linear
-                </h3>
-                <div className="flex flex-col gap-1">
-                  <Link
-                    href="/arrays"
-                    className={`rounded p-3 transition border block ${completedModules.includes("arrays") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-slate-300 border-transparent"}`}
-                  >
-                    3. Arrays {completedModules.includes("arrays") && "✓"}
-                  </Link>
-                  <Link
-                    href="/pointers"
-                    className={`rounded p-3 transition border block ${completedModules.includes("pointers") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-slate-300 border-transparent"}`}
-                  >
-                    4. Pointers {completedModules.includes("pointers") && "✓"}
-                  </Link>
-                  {isLevel2 ? (
-                    <>
-                      <Link
-                        href="/linked-lists"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("linked-lists") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-blue-400 border-transparent"}`}
-                      >
-                        5. Linked Lists{" "}
-                        {completedModules.includes("linked-lists") && "✓"}
-                      </Link>
-                      <Link
-                        href="/stacks-queues"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("stacks-queues") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-amber-500 border-transparent"}`}
-                      >
-                        6. Stacks & Queues{" "}
-                        {completedModules.includes("stacks-queues") && "✓"}
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 5. Linked Lists (Reach Lv.2)
-                      </div>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 6. Stacks & Queues (Reach Lv.2)
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              
-
-              <div>
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-3">
-                  Tier 2: Non-Linear
-                </h3>
-                <div className="flex flex-col gap-1">
-                  {isLevel3 ? (
-                    <>
-                      <Link
-                        href="/trees"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("trees") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-emerald-400 border-transparent"}`}
-                      >
-                        8. AVL Trees {completedModules.includes("trees") && "✓"}
-                      </Link>
-                      <Link
-                        href="/graphs"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("graphs") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-violet-400 border-transparent"}`}
-                      >
-                        9. Graphs & Networks{" "}
-                        {completedModules.includes("graphs") && "✓"}
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 8. AVL Trees (Reach Lv.3)
-                      </div>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 9. Graphs & Networks (Reach Lv.3)
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              {/* // Add this to your level checks at the top of the file:
-  const isLevel4 = level >= 4;
-
-  // ...  */}
-
-              {/* TIER 3: ALGORITHMS */}
-              <div>
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-3">
-                  Tier 3: Algorithms
-                </h3>
-                <div className="flex flex-col gap-1">
-                  {isLevel4 ? (
-                    <>
-                      <Link
-                        href="/sorting"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("sorting") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-orange-400 border-transparent"}`}
-                      >
-                        10. Sorting: Bubble Sort{" "}
-                        {completedModules.includes("sorting") && "✓"}
-                      </Link>
-                      <Link
-                        href="/search"
-                        className={`rounded p-3 transition border block font-medium ${completedModules.includes("search") ? "border-green-500/30 text-green-400 bg-green-500/5" : "hover:bg-slate-800 text-cyan-400 border-transparent"}`}
-                      >
-                        11. Search: Binary Search{" "}
-                        {completedModules.includes("search") && "✓"}
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 10. Sorting (Reach Lv.4)
-                      </div>
-                      <div className="rounded p-3 text-slate-600 bg-slate-900/50 cursor-not-allowed border border-transparent text-sm font-medium">
-                        🔒 11. Search (Reach Lv.4)
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
+            {/* Quick Links (Can expand later) */}
+            <nav className="hidden md:flex gap-6 text-sm font-medium">
+              <Link
+                href="/"
+                className="text-slate-300 hover:text-white transition"
+              >
+                Dashboard
+              </Link>
+              <span className="text-slate-600 cursor-not-allowed">
+                Curriculum Map
+              </span>
             </nav>
           </div>
-        </aside>
 
-        {/* MAIN CONTENT AREA - animate-fade-in */}
-        <main className="flex-1 relative z-10 bg-slate-950 animate-fade-in">
+          {/* User Stats / Profile */}
+          {isMounted && (
+            <div className="flex items-center gap-6">
+              <div className="hidden sm:flex flex-col items-end">
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                  Level {level}
+                </span>
+                <div className="flex items-center gap-3">
+                  <div className="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500 transition-all duration-1000 ease-out"
+                      style={{ width: `${xp % 100}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-bold text-blue-400">
+                    {xp} XP
+                  </span>
+                </div>
+              </div>
+
+              {/* Profile Avatar Avatar */}
+              <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg border-2 border-slate-800 cursor-pointer hover:scale-105 transition">
+                MY
+              </div>
+            </div>
+          )}
+        </header>
+
+        {/* DYNAMIC MAIN CONTENT AREA */}
+        <main className="flex-1 relative overflow-hidden bg-slate-950">
           {children}
         </main>
       </body>
