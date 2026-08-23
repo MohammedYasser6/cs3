@@ -90,7 +90,7 @@ export default function LinkedListsQuizPage() {
           <div className="flex flex-col gap-3">
             {passed && (
               <Link
-                href="/trees"
+                href="/stack-queues"
                 className="block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold transition"
               >
                 Next Module →

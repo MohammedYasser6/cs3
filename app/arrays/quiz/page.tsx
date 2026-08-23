@@ -90,7 +90,7 @@ export default function ArraysQuizPage() {
             </p>
           )}
           <Link
-            href="/"
+            href="pointers"
             className="block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold transition"
           >
             Return to Sandbox
