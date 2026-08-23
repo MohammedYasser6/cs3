@@ -57,8 +57,8 @@ const COURSES = [
       {
         id: "2d-arrays",
         title: "2D Arrays & Matrices",
-        path: "#",
-        available: false,
+        path: "/2d-arrays",
+        available: true,
         reqLevel: 2,
       },
       {
