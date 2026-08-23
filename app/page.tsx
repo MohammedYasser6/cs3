@@ -152,15 +152,79 @@ export default function Dashboard() {
   return (
     <div className="h-full w-full overflow-y-auto custom-scrollbar bg-slate-950 p-8 md:p-12 animate-fade-in">
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* Dashboard Header */}
-        <div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Welcome back, <span className="text-blue-500">Mohammed</span>.
-          </h1>
-          <p className="text-slate-400 text-lg max-w-2xl">
-            Select a module below to launch the 3D learning environment.
-            Concepts unlock as you level up and master the fundamentals.
-          </p>
+        {/* CS³ BRAND HERO SECTION */}
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 p-8 md:p-12 shadow-2xl">
+          {/* Ambient Glowing Backgrounds */}
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none"></div>
+
+          <div className="relative z-10">
+            <div className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm font-bold tracking-widest uppercase mb-6">
+              Welcome to the Next Generation of Learning
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
+              Welcome to CS
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                ³
+              </span>
+            </h1>
+
+            <p className="text-xl text-slate-300 max-w-3xl mb-10 leading-relaxed">
+              Master computer science across three dimensions. We bridge the gap
+              between abstract concepts and actual software engineering by
+              combining <span className="text-white font-bold">Theory</span>,{" "}
+              <span className="text-white font-bold">Implementation</span>, and{" "}
+              <span className="text-white font-bold">Visualization</span> into a
+              single unified engine.
+            </p>
+
+            {/* The 3 Pillars Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
+                <div className="p-3 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-xl text-xl">
+                  📚
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-2">1. Theory</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    Understand the underlying math, structural logic, and Big-O
+                    time complexity.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
+                <div className="p-3 bg-pink-500/10 text-pink-400 border border-pink-500/20 rounded-xl text-xl">
+                  💻
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-2">
+                    2. Implementation
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    Write and analyze real syntax across C++, Java, Kotlin, and
+                    Python.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
+                <div className="p-3 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-xl text-xl">
+                  🧊
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-2">
+                    3. Visualization
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    Watch the physical representation of RAM and Call Stacks
+                    execute in real-time 3D space.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Course Grid */}

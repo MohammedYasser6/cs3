@@ -41,7 +41,6 @@ export default function CallStackVisualizer({ frames }: CallStackProps) {
         return (
           <group key={frame.id} position={[0, yPos, 0]}>
             <mesh>
-              {/* Made the boxes wider to fit the math equations */}
               <boxGeometry
                 args={[5, 1.2, 1]}
                 {...({} as ThreeElements["boxGeometry"])}
@@ -75,6 +74,19 @@ export default function CallStackVisualizer({ frames }: CallStackProps) {
             >
               {frame.expression}
             </Text>
+
+            {/* Re-added the returning arrow, pushed slightly to the right to fit the wider box! */}
+            {frame.state === "returning" && frame.returnValue !== null && (
+              <Text
+                position={[2.8, 0, 0]}
+                fontSize={0.4}
+                color="#4ade80"
+                anchorX="left"
+                anchorY="middle"
+              >
+                ↳ returns {frame.returnValue}
+              </Text>
+            )}
           </group>
         );
       })}
