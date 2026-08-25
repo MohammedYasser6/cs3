@@ -27,18 +27,22 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // ESCAPE HATCH: Let the login page render instantly without guard interference
+  // 1. ESCAPE HATCH: Always allow the login page
   if (pathname === "/login") {
     return <>{children}</>;
   }
 
+  // 2. Find if the current route has an XP threshold
   const matchedRoute = Object.entries(ROUTE_XP_REQUIREMENTS).find(([route]) =>
     pathname.startsWith(route),
   );
 
-  const isLocked = Boolean(
-    matchedRoute && isMounted && xp < matchedRoute[1].minXP,
-  );
+  // If the route doesn't have an XP requirement, let them through instantly!
+  if (!matchedRoute) {
+    return <>{children}</>;
+  }
+
+  const isLocked = Boolean(isMounted && xp < matchedRoute[1].minXP);
 
   useEffect(() => {
     if (isLocked) {
