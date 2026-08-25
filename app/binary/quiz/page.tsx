@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useStore } from "../../../store/useStore";
+import { useStore } from "../../../store/useStore"; // Adjust path to store
 
 const QUIZ_QUESTIONS = [
   {
@@ -55,16 +55,17 @@ export default function BinaryQuizPage() {
     setIsAnswerChecked(true);
   };
 
-  const nextQuestion = () => {
-    if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedOption(null);
-      setIsAnswerChecked(false);
-    } else {
-      setIsQuizFinished(true);
-      if (score >= 2) completeModule("binary", 50);
-    }
-  };
+ const nextQuestion = () => {
+   if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
+     setCurrentQuestion(currentQuestion + 1);
+     setSelectedOption(null);
+     setIsAnswerChecked(false);
+   } else {
+     setIsQuizFinished(true);
+     // Changed from 50 to 0 XP to protect your level logic!
+     if (score >= 2) completeModule("binary", 0);
+   }
+ };
 
   if (isQuizFinished) {
     const passed = score >= 2;

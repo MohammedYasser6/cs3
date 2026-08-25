@@ -65,13 +65,21 @@ export default function BinaryPage() {
           <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800 mb-6">
             <button
               onClick={() => setActiveTab("theory")}
-              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${activeTab === "theory" ? "bg-slate-800 text-white shadow-sm" : "text-slate-500 hover:text-slate-300"}`}
+              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${
+                activeTab === "theory"
+                  ? "bg-slate-800 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
             >
               Theory
             </button>
             <button
               onClick={() => setActiveTab("code")}
-              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${activeTab === "code" ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-300"}`}
+              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${
+                activeTab === "code"
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
             >
               Implementation
             </button>
@@ -130,7 +138,7 @@ export default function BinaryPage() {
                   </div>
                 </div>
               </div>
-              <div className="mt-8 bg-slate-950 border border-blue-500/30 p-4 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+              <div className="mt-8 bg-slate-950 border border-blue-500/30 p-4 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.1)] mb-8">
                 <p className="text-xs text-blue-500 font-bold uppercase tracking-widest mb-2">
                   Hardware Execution Log
                 </p>
@@ -140,11 +148,26 @@ export default function BinaryPage() {
               </div>
             </>
           ) : (
-            <CodeViewer
-              snippets={BINARY_CODE}
-              explanation="Low-level bitwise manipulation is crucial in embedded systems, cryptography, and network engineering to optimize performance without heavy math operations."
-            />
+            <div className="mb-8">
+              <CodeViewer
+                snippets={BINARY_CODE}
+                explanation="Low-level bitwise manipulation is crucial in embedded systems, cryptography, and network engineering to optimize performance without heavy math operations."
+              />
+            </div>
           )}
+
+          {/* THE NEW EXAM BUTTON - Pin it to the bottom of the scrolling content */}
+          <div className="mt-auto pt-4 flex justify-center w-full">
+            <Link
+              href="/binary/quiz"
+              className="group relative w-full flex justify-center py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+            >
+              <div className="absolute inset-0 -translate-x-full bg-white/20 skew-x-12 group-hover:animate-[shimmer_1s_forwards]"></div>
+              <span className="relative flex items-center gap-3">
+                📝 Take the Exam
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -176,7 +199,11 @@ export default function BinaryPage() {
                 <button
                   key={index}
                   onClick={() => toggleBit(index)}
-                  className={`w-10 h-10 rounded font-bold transition active:scale-95 ${bit === 1 ? "bg-green-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600"}`}
+                  className={`w-10 h-10 rounded font-bold transition active:scale-95 ${
+                    bit === 1
+                      ? "bg-green-600 text-white"
+                      : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                  }`}
                 >
                   {bit}
                 </button>

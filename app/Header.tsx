@@ -1,6 +1,9 @@
 import Link from "next/link";
-import { auth, signIn, signOut } from "@/auth";
+import { auth, signIn } from "@/auth";
 import ClientXPBar from "./ClientXPBar";
+import UserDropdown from "../components/UserDropdown";
+import { prisma } from "@/lib/prisma";
+import StoreHydrator from "../components/StoreHydrator";
 
 // Custom CS³ SVG Logo Component
 const CSTubedLogo = () => (
@@ -80,8 +83,22 @@ export default async function Header() {
   const session = await auth();
   const user = session?.user;
 
+  // Ask Neon for this user's official XP
+  let dbUser = null;
+  if (user?.email) {
+    dbUser = await prisma.user.findUnique({
+      where: { email: user.email },
+      select: { xp: true, completedModules: true },
+    });
+  }
+
   return (
     <header className="h-16 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-6 z-50 shadow-md">
+      {/* Mount the invisible hydrator if we found DB stats */}
+      {dbUser && (
+        <StoreHydrator dbXP={dbUser.xp} dbModules={dbUser.completedModules} />
+      )}
+
       <div className="flex items-center gap-10">
         <Link href="/" className="group flex items-center gap-3 transition-all">
           <CSTubedLogo />
@@ -111,37 +128,14 @@ export default async function Header() {
       <div className="flex items-center">
         <ClientXPBar />
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center ml-4">
           {user ? (
-            <form
-              action={async () => {
-                "use server";
-                await signOut();
-              }}
-            >
-              <button
-                type="submit"
-                title="Click to Sign Out"
-                className="hover:scale-105 transition-transform border-2 border-slate-800 hover:border-cyan-400 rounded-full flex items-center justify-center bg-slate-900 h-10 w-10 overflow-hidden cursor-pointer"
-              >
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name || "User"}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span className="text-sm font-bold text-cyan-400">
-                    {user.name?.charAt(0) || "U"}
-                  </span>
-                )}
-              </button>
-            </form>
+            <UserDropdown user={user} />
           ) : (
             <form
               action={async () => {
                 "use server";
-                await signIn("github");
+                await signIn();
               }}
             >
               <button
