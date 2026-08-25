@@ -27,7 +27,7 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // 1. ESCAPE HATCH: Let the login page render instantly without guard interference
+  // ESCAPE HATCH: Let the login page render instantly without guard interference
   if (pathname === "/login") {
     return <>{children}</>;
   }
@@ -56,4 +56,3 @@ export default function GlobalRouteGuard({
 
   return <>{children}</>;
 }
-git add ., git commit -m "Fix header signin link and add guard escape hatch", git push
