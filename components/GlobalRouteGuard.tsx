@@ -27,23 +27,14 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // 1. Always allow the login page instantly
-  if (pathname === "/login") {
-    return <>{children}</>;
-  }
-
-  // 2. Find if the current route has an XP threshold
+  // 1. Check if it's locked *only* after mounting
   const matchedRoute = Object.entries(ROUTE_XP_REQUIREMENTS).find(([route]) =>
     pathname.startsWith(route),
   );
 
-  // If the route doesn't have an XP requirement, render immediately! No blocking spinners.
-  if (!matchedRoute) {
-    return <>{children}</>;
-  }
-
-  // Only evaluate locking once mounted and Zustand has loaded
-  const isLocked = Boolean(isMounted && xp < matchedRoute[1].minXP);
+  const isLocked = Boolean(
+    isMounted && matchedRoute && xp < matchedRoute[1].minXP,
+  );
 
   useEffect(() => {
     if (isLocked) {
@@ -51,7 +42,17 @@ export default function GlobalRouteGuard({
     }
   }, [isLocked, router]);
 
-  // Only show the spinner if the route is actively locked and we are redirecting away from an advanced module
+  // 2. Prevent server-side rendering mismatch by waiting for mount
+  if (!isMounted) {
+    return <>{children}</>;
+  }
+
+  // 3. Always allow the login page instantly
+  if (pathname === "/login") {
+    return <>{children}</>;
+  }
+
+  // 4. Show spinner only if locked and redirecting
   if (isLocked) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-950">
