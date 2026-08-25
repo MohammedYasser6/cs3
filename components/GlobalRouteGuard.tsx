@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useStore } from "../store/useStore"; // Adjust path to your Zustand store
+import { useStore } from "../store/useStore";
 
-// 1. DEFINE ALL XP REQUIREMENTS IN ONE PLACE
 const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; label: string }> =
   {
     "/trees": { minXP: 50, label: "Trees & Hierarchical Structures" },
@@ -12,7 +11,6 @@ const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; label: string }> =
     "/dp": { minXP: 150, label: "Dynamic Programming" },
     "/quiz/trees": { minXP: 50, label: "Trees Quiz" },
     "/quiz/graphs": { minXP: 100, label: "Graphs Quiz" },
-    // Add as many routes here as you want!
   };
 
 export default function GlobalRouteGuard({
@@ -29,7 +27,11 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // Find if the current route has an XP threshold
+  // 1. ESCAPE HATCH: Let the login page render instantly without guard interference
+  if (pathname === "/login") {
+    return <>{children}</>;
+  }
+
   const matchedRoute = Object.entries(ROUTE_XP_REQUIREMENTS).find(([route]) =>
     pathname.startsWith(route),
   );
@@ -40,12 +42,10 @@ export default function GlobalRouteGuard({
 
   useEffect(() => {
     if (isLocked) {
-      // Redirect back to dashboard if locked
       router.replace("/");
     }
   }, [isLocked, router]);
 
-  // While mounting or redirecting, don't flash the locked content
   if (!isMounted || isLocked) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-950">
@@ -56,3 +56,4 @@ export default function GlobalRouteGuard({
 
   return <>{children}</>;
 }
+git add ., git commit -m "Fix header signin link and add guard escape hatch", git push

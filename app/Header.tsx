@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { auth, signIn } from "@/auth";
+import { auth } from "@/auth";
 import ClientXPBar from "./ClientXPBar";
 import UserDropdown from "../components/UserDropdown";
 import { prisma } from "@/lib/prisma";
@@ -132,19 +132,13 @@ export default async function Header() {
           {user ? (
             <UserDropdown user={user} />
           ) : (
-            <form
-              action={async () => {
-                "use server";
-                await signIn();
-              }}
+            // FIX: Replaced the looping server action with a clean Link to our custom /login page
+            <Link
+              href="/login"
+              className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-lg font-bold shadow-lg shadow-blue-500/20 transition-all text-sm cursor-pointer inline-flex items-center"
             >
-              <button
-                type="submit"
-                className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white rounded-lg font-bold shadow-lg shadow-blue-500/20 transition-all text-sm cursor-pointer"
-              >
-                Sign In
-              </button>
-            </form>
+              Sign In
+            </Link>
           )}
         </div>
       </div>
