@@ -27,32 +27,36 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // 1. Check if it's locked *only* after mounting
+  // Find if the current route has an XP threshold
   const matchedRoute = Object.entries(ROUTE_XP_REQUIREMENTS).find(([route]) =>
     pathname.startsWith(route),
   );
 
+  // Calculate lock condition safely
   const isLocked = Boolean(
     isMounted && matchedRoute && xp < matchedRoute[1].minXP,
   );
 
+  // PLACE ALL HOOKS HERE - Safely at the top level!
   useEffect(() => {
     if (isLocked) {
       router.replace("/");
     }
   }, [isLocked, router]);
 
-  // 2. Prevent server-side rendering mismatch by waiting for mount
+  // --- EARLY RETURNS ARE SAFE ONLY AFTER ALL HOOKS ---
+
+  // 1. Prevent server-side rendering mismatch by waiting for mount
   if (!isMounted) {
     return <>{children}</>;
   }
 
-  // 3. Always allow the login page instantly
+  // 2. Always allow the login page instantly
   if (pathname === "/login") {
     return <>{children}</>;
   }
 
-  // 4. Show spinner only if locked and redirecting
+  // 3. Show spinner only if locked and redirecting
   if (isLocked) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-950">
