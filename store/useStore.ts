@@ -1,37 +1,50 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware"; // Import the persist tool
+import { persist } from "zustand/middleware";
 
-interface UserState {
+interface StoreState {
   xp: number;
   level: number;
   completedModules: string[];
-  completeModule: (moduleName: string, xpGained: number) => void;
+  completeModule: (moduleId: string, xpReward: number) => void; // 1. Add to interface
 }
 
-// Wrap our entire store logic inside persist()
-export const useStore = create<UserState>()(
+export const useStore = create<StoreState>()(
   persist(
     (set) => ({
       xp: 0,
       level: 1,
       completedModules: [],
 
-      completeModule: (moduleName, xpGained) =>
+      // 2. Implement the completeModule function
+      completeModule: (moduleId: string, xpReward: number) =>
         set((state) => {
-          if (state.completedModules.includes(moduleName)) return state;
+          // Prevent rewarding XP twice if they take the quiz again
+          const alreadyCompleted = state.completedModules?.includes(moduleId);
+          if (alreadyCompleted) return state;
 
-          const newXp = state.xp + xpGained;
-          const newLevel = Math.floor(newXp / 100) + 1;
+          const updatedModules = [...(state.completedModules || []), moduleId];
+          const newXP = state.xp + xpReward;
+          const newLevel = Math.floor(newXP / 100) + 1;
+
+          // Sync cookie for your middleware route guard
+          if (typeof document !== "undefined") {
+            document.cookie = `user_xp=${newXP}; path=/; max-age=2592000; SameSite=Lax`;
+          }
 
           return {
-            xp: newXp,
+            completedModules: updatedModules,
+            xp: newXP,
             level: newLevel,
-            completedModules: [...state.completedModules, moduleName],
           };
         }),
     }),
     {
-      name: "cs-3d-user-progress", // The name of the file saved in the browser's storage
+      name: "cs3-storage",
+      onRehydrateStorage: () => (state) => {
+        if (state && typeof document !== "undefined") {
+          document.cookie = `user_xp=${state.xp}; path=/; max-age=2592000; SameSite=Lax`;
+        }
+      },
     },
   ),
 );

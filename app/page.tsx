@@ -235,7 +235,8 @@ export default function Dashboard() {
               (m) => m.available,
             ).length;
             const completedInCourse = course.modules.filter((m) =>
-              completedModules.includes(m.id),
+              // The question mark safely checks if it exists before running .includes()
+              completedModules?.includes(m.id),
             ).length;
             const progress =
               totalAvailable === 0
