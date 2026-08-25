@@ -27,7 +27,7 @@ export default function GlobalRouteGuard({
     setIsMounted(true);
   }, []);
 
-  // 1. ESCAPE HATCH: Always allow the login page
+  // 1. Always allow the login page instantly
   if (pathname === "/login") {
     return <>{children}</>;
   }
@@ -37,11 +37,12 @@ export default function GlobalRouteGuard({
     pathname.startsWith(route),
   );
 
-  // If the route doesn't have an XP requirement, let them through instantly!
+  // If the route doesn't have an XP requirement, render immediately! No blocking spinners.
   if (!matchedRoute) {
     return <>{children}</>;
   }
 
+  // Only evaluate locking once mounted and Zustand has loaded
   const isLocked = Boolean(isMounted && xp < matchedRoute[1].minXP);
 
   useEffect(() => {
@@ -50,7 +51,8 @@ export default function GlobalRouteGuard({
     }
   }, [isLocked, router]);
 
-  if (!isMounted || isLocked) {
+  // Only show the spinner if the route is actively locked and we are redirecting away from an advanced module
+  if (isLocked) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-950">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
