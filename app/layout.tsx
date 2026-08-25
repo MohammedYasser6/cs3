@@ -2,6 +2,10 @@ import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import Header from "./Header";
 import GlobalRouteGuard from "../components/GlobalRouteGuard"; // Adjust path
+export const metadata = {
+  title: "CS³ | Interactive Visualizer",
+  description: "Advanced Computer Science 3D Visualizer",
+};
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({
