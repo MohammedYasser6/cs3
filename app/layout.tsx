@@ -1,12 +1,11 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import Header from "./Header";
-import GlobalRouteGuard from "../components/GlobalRouteGuard"; // Adjust path if needed
+import GlobalRouteGuard from "../components/GlobalRouteGuard";
 
-// Makes the browser tab look professional
 export const metadata = {
   title: "CS³ | Interactive Visualizer",
-  description: "Advanced Computer Science 3D Visualizer",
+  description: "Advanced Computer Science & AI Visualizer",
 };
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -28,12 +27,11 @@ export default function RootLayout({
     >
       <body
         suppressHydrationWarning
-        className="flex flex-col h-screen w-screen overflow-hidden bg-slate-950 selection:bg-cyan-500 selection:text-white"
+        className="flex h-screen w-screen flex-col overflow-hidden bg-slate-950 selection:bg-cyan-500 selection:text-white"
       >
         <Header />
 
-        <main className="flex-1 relative overflow-hidden bg-slate-950">
-          {/* Automatically gates every route dynamically */}
+        <main className="relative flex-1 overflow-hidden bg-slate-950">
           <GlobalRouteGuard>{children}</GlobalRouteGuard>
         </main>
       </body>
