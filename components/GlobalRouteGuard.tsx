@@ -2,44 +2,39 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useStore } from "../store/useStore"; // Ensure useStore exports csXp, aiXp, cyberXp
+import { useStore } from "../store/useStore";
 
 type TrackXP = "csXp" | "aiXp" | "cyberXp";
 
-const ROUTE_XP_REQUIREMENTS: Record<
-  string,
-  { minXP: number; track: TrackXP; label: string }
-> = {
-  // CS Track (Legacy)
-  "/trees": {
-    minXP: 50,
-    track: "csXp",
-    label: "Trees & Hierarchical Structures",
-  },
-  "/graphs": { minXP: 100, track: "csXp", label: "Graphs & Networks" },
-  "/dp": { minXP: 150, track: "csXp", label: "Dynamic Programming" },
-  "/quiz/trees": { minXP: 50, track: "csXp", label: "Trees Quiz" },
-  "/quiz/graphs": { minXP: 100, track: "csXp", label: "Graphs Quiz" },
+const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; track: TrackXP }> =
+  {
+    // Track 1: CS Fundamentals (0 XP)
+    "/hardware": { minXP: 0, track: "csXp" },
+    "/binary": { minXP: 0, track: "csXp" },
+    "/pointers": { minXP: 0, track: "csXp" },
 
-  // AI Track
-  "/ai/vectors-and-matrices": {
-    minXP: 100,
-    track: "aiXp",
-    label: "Vectors & Matrices",
-  },
-  "/ai/linear-regression": {
-    minXP: 250,
-    track: "aiXp",
-    label: "Linear Regression",
-  },
+    // Track 2: Linear Data Structures (Requires XP from previous track)
+    "/arrays": { minXP: 50, track: "csXp" },
+    "/2d-arrays": { minXP: 100, track: "csXp" },
+    "/linked-lists": { minXP: 150, track: "csXp" },
+    "/stacks-queues": { minXP: 200, track: "csXp" },
+    "/hash-tables": { minXP: 250, track: "csXp" },
 
-  // Cyber Track
-  "/cyber/classical-ciphers": {
-    minXP: 100,
-    track: "cyberXp",
-    label: "Classical Ciphers",
-  },
-};
+    // Track 3: Non-Linear Structures
+    "/trees": { minXP: 300, track: "csXp" },
+    "/quiz/trees": { minXP: 300, track: "csXp" },
+    "/graphs": { minXP: 350, track: "csXp" },
+    "/quiz/graphs": { minXP: 350, track: "csXp" },
+
+    // Track 4: Algorithms & Logic
+    "/recursion": { minXP: 400, track: "csXp" },
+    "/sorting": { minXP: 450, track: "csXp" },
+    "/search": { minXP: 450, track: "csXp" },
+
+    // AI Track
+    "/ai/vectors-and-matrices": { minXP: 100, track: "aiXp" },
+    "/ai/linear-regression": { minXP: 250, track: "aiXp" },
+  };
 
 export default function GlobalRouteGuard({
   children,
@@ -48,45 +43,37 @@ export default function GlobalRouteGuard({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const store = useStore();
+
+  const csXp = useStore((state) => state.csXp) ?? 0;
+  const aiXp = useStore((state) => state.aiXp) ?? 0;
+  const cyberXp = useStore((state) => state.cyberXp) ?? 0;
+
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Find if the current route has an XP threshold
+  const trackXpMap: Record<TrackXP, number> = { csXp, aiXp, cyberXp };
   const matchedRoute = Object.entries(ROUTE_XP_REQUIREMENTS).find(([route]) =>
     pathname.startsWith(route),
   );
 
-  // Calculate lock condition safely checking the specific track's XP
   const isLocked = Boolean(
     isMounted &&
     matchedRoute &&
-    store[matchedRoute[1].track] < matchedRoute[1].minXP,
+    trackXpMap[matchedRoute[1].track] < matchedRoute[1].minXP,
   );
 
-  // PLACE ALL HOOKS HERE - Safely at the top level!
   useEffect(() => {
     if (isLocked) {
       router.replace("/");
     }
   }, [isLocked, router]);
 
-  // --- EARLY RETURNS ARE SAFE ONLY AFTER ALL HOOKS ---
+  if (!isMounted) return <>{children}</>;
+  if (pathname === "/login" || pathname === "/") return <>{children}</>;
 
-  // 1. Prevent server-side rendering mismatch by waiting for mount
-  if (!isMounted) {
-    return <>{children}</>;
-  }
-
-  // 2. Always allow the login page instantly
-  if (pathname === "/login") {
-    return <>{children}</>;
-  }
-
-  // 3. Show spinner only if locked and redirecting
   if (isLocked) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-slate-950">

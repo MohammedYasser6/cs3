@@ -1,94 +1,129 @@
 "use client";
 
 import Link from "next/link";
-import VectorSpaceVisualizer from "@/components/canvas/VectorSpaceVisualizer";
+import { useStore } from "@/store/useStore";
+import { Lock, Unlock } from "lucide-react";
 
-export default function VectorsAndMatricesPage() {
+const AI_MODULES = [
+  {
+    id: "what-is-ai",
+    title: "01. The Learning Paradigm",
+    desc: "Explicit rules vs. machine learning.",
+    path: "/ai/what-is-ai",
+    reqXp: 0,
+  },
+  {
+    id: "vectors-and-matrices",
+    title: "02. Vectors & Matrices",
+    desc: "The foundational mathematics behind tensors.",
+    path: "/ai/vectors-and-matrices",
+    reqXp: 100,
+  },
+  {
+    id: "linear-regression",
+    title: "03. Linear Regression",
+    desc: "Predicting continuous values using best-fit lines.",
+    path: "/ai/linear-regression",
+    reqXp: 250,
+  },
+  {
+    id: "deep-learning",
+    title: "04. Neural Networks",
+    desc: "Perceptrons, hidden layers, and backpropagation.",
+    path: "/ai/deep-learning",
+    reqXp: 400,
+  },
+  {
+    id: "computer-vision",
+    title: "05. Computer Vision (CNNs)",
+    desc: "Convolutional filters and feature pooling.",
+    path: "/ai/computer-vision",
+    reqXp: 600,
+  },
+  {
+    id: "nlp-rnns",
+    title: "06. Sequential Data (RNNs/LSTMs)",
+    desc: "Processing time-series data and basic text.",
+    path: "/ai/nlp-rnns",
+    reqXp: 850,
+  },
+  {
+    id: "transformers",
+    title: "07. Attention & Transformers",
+    desc: "The architecture powering modern LLMs.",
+    path: "/ai/transformers",
+    reqXp: 1150,
+  },
+  {
+    id: "generative-ai",
+    title: "08. Generative AI",
+    desc: "Diffusion models and generative adversarial networks.",
+    path: "/ai/generative-ai",
+    reqXp: 1500,
+  },
+];
+
+export default function AITrackDashboard() {
+  const aiXp = useStore((state) => state.aiXp) || 0;
+
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden text-slate-200">
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 gap-8 xl:grid-cols-2">
-          <section className="flex flex-col rounded-xl border border-purple-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
-            <div className="mb-2 text-sm font-bold tracking-widest text-purple-500 uppercase">
-              AI Track • Level 1
-            </div>
-            <h1 className="mb-6 text-4xl font-extrabold text-slate-100">
-              The Language of AI
-            </h1>
+    <div className="h-full w-full overflow-y-auto p-8 text-white">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-12 border-b border-purple-900/50 pb-6">
+          <h1 className="text-4xl font-black tracking-tight text-purple-400">
+            Artificial Intelligence
+          </h1>
+          <p className="mt-2 text-slate-400">
+            Master AI from raw data mapping to generative neural networks.
+          </p>
+        </header>
 
-            <div className="space-y-6 text-slate-300 leading-relaxed">
-              <p>
-                Machine learning models do not understand text, images, or
-                audio. They exclusively understand arrays of numbers, known as{" "}
-                <strong className="text-purple-400">Tensors</strong>.
-              </p>
+        <div className="grid gap-6">
+          {AI_MODULES.map((mod) => {
+            const isUnlocked = aiXp >= mod.reqXp;
 
-              <div className="rounded-lg bg-slate-950 p-4 border border-slate-800">
-                <h3 className="font-bold text-slate-100 mb-2">
-                  Data Representation
-                </h3>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li>
-                    <strong className="text-cyan-400">Scalars (0D):</strong> A
-                    single number (e.g.,{" "}
-                    <code className="bg-slate-800 px-1 rounded">25</code>{" "}
-                    representing age).
-                  </li>
-                  <li>
-                    <strong className="text-cyan-400">Vectors (1D):</strong> A
-                    list of numbers. In Natural Language Processing, the word
-                    &quot;King&quot; might be represented as an embedding
-                    vector:{" "}
-                    <code className="bg-slate-800 px-1 rounded">
-                      [0.9, -0.2, 0.4]
-                    </code>
-                    .
-                  </li>
-                  <li>
-                    <strong className="text-cyan-400">Matrices (2D):</strong> A
-                    grid of numbers. A 28x28 pixel grayscale image is fed into a
-                    neural network as a 2D matrix of pixel intensities ranging
-                    from 0 to 255.
-                  </li>
-                </ul>
-              </div>
-
-              <div className="rounded-lg bg-slate-950 p-4 border border-slate-800">
-                <h3 className="font-bold text-slate-100 mb-2">
-                  Transformations (The &quot;Learning&quot;)
-                </h3>
-                <p className="text-sm mb-2">
-                  When data passes through a neural network layer, the input
-                  vector is multiplied by a{" "}
-                  <strong className="text-purple-400">Weight Matrix</strong>.
-                  Matrix multiplication physically rotates, scales, or shears
-                  the data in mathematical space to find boundaries between
-                  different categories (like separating images of cats from
-                  dogs).
-                </p>
-                <p className="text-sm border-l-2 border-purple-500 pl-3 italic">
-                  &quot;Training an AI&quot; is simply the process of slowly
-                  adjusting the numbers inside these matrices until they
-                  transform the input data into the correct output answers.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <Link
-                href="/ai/vectors-and-matrices/quiz"
-                className="inline-flex w-fit items-center rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white transition-all hover:bg-purple-500 shadow-[0_0_20px_rgba(147,51,234,0.3)]"
+            return (
+              <div
+                key={mod.id}
+                className={`relative flex items-center justify-between rounded-xl border p-6 transition-all ${
+                  isUnlocked
+                    ? "border-purple-800/50 bg-slate-900/50 hover:border-purple-500 hover:shadow-[0_0_20px_rgba(147,51,234,0.15)]"
+                    : "border-slate-800 bg-slate-950 opacity-60"
+                }`}
               >
-                Take Assessment (+150 AI XP)
-              </Link>
-            </div>
-          </section>
-
-          <section className="relative flex min-h-[550px] items-center justify-center rounded-xl border border-slate-800 bg-black overflow-hidden shadow-2xl">
-            <VectorSpaceVisualizer />
-          </section>
+                <div>
+                  <h2 className="text-xl font-bold text-slate-200">
+                    {mod.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-400">{mod.desc}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  {!isUnlocked && (
+                    <span className="text-xs font-mono text-slate-500">
+                      Requires {mod.reqXp} AI XP
+                    </span>
+                  )}
+                  {isUnlocked ? (
+                    <Link
+                      href={mod.path}
+                      className="flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-purple-500"
+                    >
+                      <Unlock className="h-4 w-4" /> Enter
+                    </Link>
+                  ) : (
+                    <button
+                      disabled
+                      className="flex cursor-not-allowed items-center gap-2 rounded-lg bg-slate-800 px-5 py-2.5 text-sm font-semibold text-slate-500"
+                    >
+                      <Lock className="h-4 w-4" /> Locked
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

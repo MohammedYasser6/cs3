@@ -6,9 +6,9 @@ export type Track = "cs" | "ai" | "cyber";
 
 interface StoreState {
   xp: number; // Global Total XP
-  csXp: number; // Legacy/Standard CS Track
-  aiXp: number; // AI Track
-  cyberXp: number; // Cyber Track
+  csXp: number;
+  aiXp: number;
+  cyberXp: number;
   level: number;
   completedModules: string[];
   completeModule: (moduleId: string, xpReward: number, track?: Track) => void;
@@ -40,11 +40,8 @@ export const useStore = create<StoreState>()(
         const state = get();
         if (state.completedModules?.includes(moduleId)) return;
 
-        // 1. Fire the database update silently in the background
-        // NOTE: Update your saveProgressToDB action to accept the 'track' parameter!
         saveProgressToDB(moduleId, xpReward, track).catch(console.error);
 
-        // 2. Instantly update the UI (Optimistic Update)
         const newTotalXP = state.xp + xpReward;
         const newTrackXP = state[`${track}Xp`] + xpReward;
         const newLevel = Math.floor(newTotalXP / 100) + 1;
@@ -63,9 +60,8 @@ export const useStore = create<StoreState>()(
       },
 
       resetProgress: () => {
-        if (typeof document !== "undefined") {
+        if (typeof document !== "undefined")
           document.cookie = "user_xp=0; path=/; max-age=0; SameSite=Lax";
-        }
         set({
           xp: 0,
           csXp: 0,
@@ -76,14 +72,13 @@ export const useStore = create<StoreState>()(
         });
       },
 
-      // Overwrites local state with the official Database state
       syncFromDB: (dbXP, dbModules, dbCsXp = 0, dbAiXp = 0, dbCyberXp = 0) => {
-        if (typeof document !== "undefined") {
+        if (typeof document !== "undefined")
           document.cookie = `user_xp=${dbXP}; path=/; max-age=2592000; SameSite=Lax`;
-        }
+        const safeCsXp = dbCsXp === 0 && dbXP > 0 ? dbXP : dbCsXp;
         set({
           xp: dbXP,
-          csXp: dbCsXp,
+          csXp: safeCsXp,
           aiXp: dbAiXp,
           cyberXp: dbCyberXp,
           completedModules: dbModules,
@@ -91,6 +86,15 @@ export const useStore = create<StoreState>()(
         });
       },
     }),
-    { name: "cs3-storage" }, // Persist config
+    {
+      name: "cs3-storage",
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0) {
+          persistedState.csXp = persistedState.xp || 0;
+        }
+        return persistedState;
+      },
+    },
   ),
 );

@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import Header from "./Header";
 import GlobalRouteGuard from "../components/GlobalRouteGuard";
+import AuthProvider from "../components/AuthProvider";
 
 export const metadata = {
   title: "CS³ | Interactive Visualizer",
@@ -29,11 +30,13 @@ export default function RootLayout({
         suppressHydrationWarning
         className="flex h-screen w-screen flex-col overflow-hidden bg-slate-950 selection:bg-cyan-500 selection:text-white"
       >
-        <Header />
+        <AuthProvider>
+          <Header />
 
-        <main className="relative flex-1 overflow-hidden bg-slate-950">
-          <GlobalRouteGuard>{children}</GlobalRouteGuard>
-        </main>
+          <main className="relative flex-1 overflow-hidden bg-slate-950">
+            <GlobalRouteGuard>{children}</GlobalRouteGuard>
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

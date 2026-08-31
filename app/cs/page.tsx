@@ -5,33 +5,103 @@ import { useStore } from "@/store/useStore";
 import { Lock, Unlock } from "lucide-react";
 
 const CS_MODULES = [
+  // 1. CS Fundamentals
+  {
+    id: "hardware",
+    title: "Hardware & RAM",
+    desc: "How computers actually think, store, and process data at the hardware level.",
+    path: "/hardware",
+    reqXp: 0,
+  },
   {
     id: "binary",
-    title: "01. Binary & Bitwise",
-    desc: "The foundation of computing.",
+    title: "Binary & Bitwise",
+    desc: "Low-level data representation and operations.",
     path: "/binary",
     reqXp: 0,
   },
   {
-    id: "trees",
-    title: "02. Trees & Hierarchical Structures",
-    desc: "BSTs, AVL trees, and traversal algorithms.",
-    path: "/trees",
+    id: "pointers",
+    title: "Pointers & Memory",
+    desc: "Memory addresses and reference management.",
+    path: "/pointers",
+    reqXp: 0,
+  },
+
+  // 2. Linear Data Structures
+  {
+    id: "arrays",
+    title: "1D Arrays",
+    desc: "Storing and sequentially accessing data in memory.",
+    path: "/arrays",
     reqXp: 50,
   },
   {
-    id: "graphs",
-    title: "03. Graphs & Networks",
-    desc: "Nodes, edges, Dijkstra, and A* pathfinding.",
-    path: "/graphs",
+    id: "2d-arrays",
+    title: "2D Arrays & Matrices",
+    desc: "Multi-dimensional grid structures.",
+    path: "/2d-arrays",
     reqXp: 100,
   },
   {
-    id: "dp",
-    title: "04. Dynamic Programming",
-    desc: "Memoization and solving overlapping subproblems.",
-    path: "/dp",
+    id: "linked-lists",
+    title: "Linked Lists",
+    desc: "Dynamic node architectures.",
+    path: "/linked-lists",
     reqXp: 150,
+  },
+  {
+    id: "stacks-queues",
+    title: "Stacks & Queues",
+    desc: "LIFO and FIFO sequential memory logic.",
+    path: "/stacks-queues",
+    reqXp: 200,
+  },
+  {
+    id: "hash-tables",
+    title: "Hash Tables",
+    desc: "Key-value O(1) lookups via hashing.",
+    path: "/hash-tables",
+    reqXp: 250,
+  },
+
+  // 3. Non-Linear Structures
+  {
+    id: "trees",
+    title: "AVL Trees",
+    desc: "Branching architectures for complex relational data.",
+    path: "/trees",
+    reqXp: 300,
+  },
+  {
+    id: "graphs",
+    title: "Graphs & Networks",
+    desc: "Vertices, edges, and complex network mapping.",
+    path: "/graphs",
+    reqXp: 350,
+  },
+
+  // 4. Algorithms & Logic
+  {
+    id: "recursion",
+    title: "Recursion & Call Stack",
+    desc: "Frame management and divide-and-conquer logic.",
+    path: "/recursion",
+    reqXp: 400,
+  },
+  {
+    id: "sorting",
+    title: "Bubble Sort",
+    desc: "Iterative element comparison and sorting algorithms.",
+    path: "/sorting",
+    reqXp: 450,
+  },
+  {
+    id: "search",
+    title: "Binary Search",
+    desc: "Efficient logarithmic dataset searching.",
+    path: "/search",
+    reqXp: 450,
   },
 ];
 
@@ -43,10 +113,10 @@ export default function CSTrackDashboard() {
       <div className="mx-auto max-w-5xl">
         <header className="mb-12 border-b border-cyan-900/50 pb-6">
           <h1 className="text-4xl font-black tracking-tight text-cyan-400">
-            Computer Science
+            Computer Science Curriculum
           </h1>
           <p className="mt-2 text-slate-400">
-            Master core software architecture, data structures, and algorithms.
+            Restored to your exact 4-track modular architecture.
           </p>
         </header>
 
