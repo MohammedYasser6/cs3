@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useStore } from "../store/useStore";
+import { useStore } from "@/store/useStore";
 
 export default function Header() {
   const pathname = usePathname();
   const { csXp, aiXp, cyberXp } = useStore();
 
-  // Determine active track for dynamic styling
   const isAI = pathname.startsWith("/ai");
   const isCyber = pathname.startsWith("/cyber");
-  const isCS = !isAI && !isCyber && pathname !== "/login";
+  // Keep active state for legacy CS routes as well as the new dashboard
+  const isCS =
+    pathname.startsWith("/cs") ||
+    pathname.startsWith("/trees") ||
+    pathname.startsWith("/graphs") ||
+    pathname.startsWith("/dp");
 
   return (
     <header className="flex w-full items-center justify-between border-b border-slate-800 bg-slate-900/80 px-6 py-4 backdrop-blur-md z-50">
@@ -25,7 +29,7 @@ export default function Header() {
 
         <nav className="hidden space-x-1 md:flex">
           <Link
-            href="/trees"
+            href="/cs"
             className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
               isCS
                 ? "bg-cyan-900/30 text-cyan-400"
@@ -45,7 +49,7 @@ export default function Header() {
             Artificial Intelligence
           </Link>
           <Link
-            href="/cyber/classical-ciphers"
+            href="/cyber"
             className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
               isCyber
                 ? "bg-emerald-900/30 text-emerald-400"

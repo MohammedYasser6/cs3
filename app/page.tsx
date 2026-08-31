@@ -1,324 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { useStore } from "../store/useStore";
-import { useEffect, useState } from "react";
+import { useStore } from "@/store/useStore";
+import { Code2, Brain, Shield } from "lucide-react";
 
-// The unified architecture blueprint for our curriculum
-const COURSES = [
-  {
-    id: "fundamentals",
-    title: "1. CS Fundamentals",
-    description:
-      "How computers actually think, store, and process data at the hardware level.",
-    theme: "text-blue-500",
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/30",
-    modules: [
-      {
-        id: "hardware",
-        title: "Hardware & RAM",
-        path: "/hardware",
-        available: true,
-        reqLevel: 1,
-      },
-      // FIX THIS LINE:
-      {
-        id: "binary",
-        title: "Binary & Bitwise",
-        path: "/binary",
-        available: true,
-        reqLevel: 1,
-      },
-      {
-        id: "pointers",
-        title: "Pointers & Memory",
-        path: "/pointers",
-        available: true,
-        reqLevel: 1,
-      },
-    ],
-  },
-  {
-    id: "linear",
-    title: "2. Linear Data Structures",
-    description: "Storing and sequentially accessing data in memory.",
-    theme: "text-pink-500",
-    bg: "bg-pink-500/10",
-    border: "border-pink-500/30",
-    modules: [
-      {
-        id: "arrays",
-        title: "1D Arrays",
-        path: "/arrays",
-        available: true,
-        reqLevel: 1,
-      },
-      {
-        id: "2d-arrays",
-        title: "2D Arrays & Matrices",
-        path: "/2d-arrays",
-        available: true,
-        reqLevel: 2,
-      },
-      {
-        id: "linked-lists",
-        title: "Linked Lists",
-        path: "/linked-lists",
-        available: true,
-        reqLevel: 2,
-      },
-      {
-        id: "stacks-queues",
-        title: "Stacks & Queues",
-        path: "/stacks-queues",
-        available: true,
-        reqLevel: 2,
-      },
-      {
-        id: "hash-tables",
-        title: "Hash Tables",
-        path: "/hash-tables",
-        available: true,
-        reqLevel: 2,
-      },
-    ],
-  },
-  {
-    id: "nonlinear",
-    title: "3. Non-Linear Structures",
-    description: "Branching architectures for complex relational data.",
-    theme: "text-emerald-500",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
-    modules: [
-      {
-        id: "trees",
-        title: "AVL Trees",
-        path: "/trees",
-        available: true,
-        reqLevel: 3,
-      },
-      {
-        id: "graphs",
-        title: "Graphs & Networks",
-        path: "/graphs",
-        available: true,
-        reqLevel: 3,
-      },
-    ],
-  },
-  {
-    id: "algorithms",
-    title: "4. Algorithms & Logic",
-    description: "Manipulating, sorting, and searching data efficiently.",
-    theme: "text-orange-500",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/30",
-    modules: [
-      {
-        id: "recursion",
-        title: "Recursion & Call Stack",
-        path: "/recursion",
-        available: true,
-        reqLevel: 4,
-      },
-      {
-        id: "sorting",
-        title: "Bubble Sort",
-        path: "/sorting",
-        available: true,
-        reqLevel: 4,
-      },
-      {
-        id: "search",
-        title: "Binary Search",
-        path: "/search",
-        available: true,
-        reqLevel: 4,
-      },
-    ],
-  },
-];
-
-export default function Dashboard() {
-  const { completedModules, level } = useStore();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => setIsMounted(true), []);
-
-  if (!isMounted) return null; // Prevent hydration mismatch
+export default function PlatformHub() {
+  const { xp, level } = useStore();
 
   return (
-    <div className="h-full w-full overflow-y-auto custom-scrollbar bg-slate-950 p-8 md:p-12 animate-fade-in">
-      <div className="max-w-7xl mx-auto space-y-12">
-        {/* CS³ BRAND HERO SECTION */}
-        <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 p-8 md:p-12 shadow-2xl">
-          {/* Ambient Glowing Backgrounds */}
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none"></div>
+    <div className="flex h-full w-full flex-col items-center justify-center overflow-y-auto p-8 text-white">
+      <div className="mx-auto w-full max-w-5xl text-center">
+        <h1 className="mb-4 text-5xl font-black tracking-tight text-slate-100">
+          Welcome to CS<span className="text-cyan-500">³</span>
+        </h1>
+        <p className="mb-12 text-lg text-slate-400">
+          Select a domain to begin your interactive curriculum.
+          <br className="hidden md:block" />
+          Current Global Rank:{" "}
+          <strong className="text-cyan-400">Level {level}</strong> ({xp} Total
+          XP)
+        </p>
 
-          <div className="relative z-10">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm font-bold tracking-widest uppercase mb-6">
-              Welcome to the Next Generation of Learning
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
-              Welcome to CS
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                ³
-              </span>
-            </h1>
-
-            <p className="text-xl text-slate-300 max-w-3xl mb-10 leading-relaxed">
-              Master computer science across three dimensions. We bridge the gap
-              between abstract concepts and actual software engineering by
-              combining <span className="text-white font-bold">Theory</span>,{" "}
-              <span className="text-white font-bold">Implementation</span>, and{" "}
-              <span className="text-white font-bold">Visualization</span> into a
-              single unified engine.
+        <div className="grid gap-6 md:grid-cols-3">
+          {/* CS Track Card */}
+          <Link
+            href="/cs"
+            className="group relative flex flex-col items-center justify-center rounded-2xl border border-cyan-900/50 bg-slate-900/50 p-8 transition-all hover:border-cyan-500 hover:bg-slate-900 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+          >
+            <Code2 className="mb-4 h-12 w-12 text-cyan-500 transition-transform group-hover:scale-110" />
+            <h2 className="text-xl font-bold text-slate-200">
+              Software Engineering
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              Data structures, object-oriented design, and algorithms.
             </p>
+          </Link>
 
-            {/* The 3 Pillars Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
-                <div className="p-3 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-xl text-xl">
-                  📚
-                </div>
-                <div>
-                  <h3 className="text-white font-bold mb-2">1. Theory</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    Understand the underlying math, structural logic, and Big-O
-                    time complexity.
-                  </p>
-                </div>
-              </div>
+          {/* AI Track Card */}
+          <Link
+            href="/ai"
+            className="group relative flex flex-col items-center justify-center rounded-2xl border border-purple-900/50 bg-slate-900/50 p-8 transition-all hover:border-purple-500 hover:bg-slate-900 hover:shadow-[0_0_30px_rgba(147,51,234,0.15)]"
+          >
+            <Brain className="mb-4 h-12 w-12 text-purple-500 transition-transform group-hover:scale-110" />
+            <h2 className="text-xl font-bold text-slate-200">
+              Artificial Intelligence
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              Linear algebra, regressions, and neural networks.
+            </p>
+          </Link>
 
-              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
-                <div className="p-3 bg-pink-500/10 text-pink-400 border border-pink-500/20 rounded-xl text-xl">
-                  💻
-                </div>
-                <div>
-                  <h3 className="text-white font-bold mb-2">
-                    2. Implementation
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    Write and analyze real syntax across C++, Java, Kotlin, and
-                    Python.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-slate-950/50 border border-slate-800/80 p-6 rounded-2xl flex items-start gap-4 hover:border-slate-600 transition duration-300">
-                <div className="p-3 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-xl text-xl">
-                  🧊
-                </div>
-                <div>
-                  <h3 className="text-white font-bold mb-2">
-                    3. Visualization
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    Watch the physical representation of RAM and Call Stacks
-                    execute in real-time 3D space.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Course Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {COURSES.map((course) => {
-            // Calculate progress for this specific course
-            const totalAvailable = course.modules.filter(
-              (m) => m.available,
-            ).length;
-            const completedInCourse = course.modules.filter((m) =>
-              // The question mark safely checks if it exists before running .includes()
-              completedModules?.includes(m.id),
-            ).length;
-            const progress =
-              totalAvailable === 0
-                ? 0
-                : Math.round((completedInCourse / totalAvailable) * 100);
-
-            return (
-              <div
-                key={course.id}
-                className="bg-slate-900 border border-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-xl hover:border-slate-700 transition duration-300 animate-slide-up"
-              >
-                {/* Course Header */}
-                <div className={`p-6 border-b border-slate-800 ${course.bg}`}>
-                  <h2 className={`text-xl font-bold mb-2 ${course.theme}`}>
-                    {course.title}
-                  </h2>
-                  <p className="text-sm text-slate-300 min-h-[40px]">
-                    {course.description}
-                  </p>
-
-                  {/* Mini Progress Bar */}
-                  <div className="mt-4 flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wide">
-                    <span>Progress</span>
-                    <span>{progress}%</span>
-                  </div>
-                  <div className="mt-2 h-1.5 w-full bg-slate-950 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${course.theme.replace("text-", "bg-")} transition-all duration-1000`}
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Module List */}
-                <div className="p-4 flex-1 flex flex-col gap-2">
-                  {course.modules.map((mod) => {
-                    const isCompleted = completedModules.includes(mod.id);
-                    const isLocked = level < mod.reqLevel;
-
-                    if (!mod.available) {
-                      return (
-                        <div
-                          key={mod.id}
-                          className="p-3 rounded-lg border border-slate-800/50 bg-slate-900/50 text-slate-600 text-sm font-medium flex justify-between items-center cursor-not-allowed"
-                        >
-                          <span>{mod.title}</span>
-                          <span className="text-xs px-2 py-1 bg-slate-800 rounded-md">
-                            Coming Soon
-                          </span>
-                        </div>
-                      );
-                    }
-
-                    if (isLocked) {
-                      return (
-                        <div
-                          key={mod.id}
-                          className="p-3 rounded-lg border border-slate-800/50 bg-slate-900/50 text-slate-500 text-sm font-medium flex justify-between items-center cursor-not-allowed"
-                        >
-                          <span>{mod.title}</span>
-                          <span>🔒 Lv.{mod.reqLevel}</span>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <Link
-                        key={mod.id}
-                        href={mod.path}
-                        className={`p-3 rounded-lg border transition group flex justify-between items-center ${isCompleted ? `bg-slate-950 ${course.border} ${course.theme}` : "border-transparent bg-slate-800 hover:bg-slate-700 text-slate-200"}`}
-                      >
-                        <span className="font-medium text-sm group-hover:translate-x-1 transition-transform">
-                          {mod.title}
-                        </span>
-                        {isCompleted && <span>✓</span>}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+          {/* Cyber Track Card */}
+          <Link
+            href="/cyber"
+            className="group relative flex flex-col items-center justify-center rounded-2xl border border-emerald-900/50 bg-slate-900/50 p-8 transition-all hover:border-emerald-500 hover:bg-slate-900 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)]"
+          >
+            <Shield className="mb-4 h-12 w-12 text-emerald-500 transition-transform group-hover:scale-110" />
+            <h2 className="text-xl font-bold text-slate-200">Cybersecurity</h2>
+            <p className="mt-2 text-sm text-slate-400">
+              Cryptography, web vulnerabilities, and network defense.
+            </p>
+          </Link>
         </div>
       </div>
     </div>
