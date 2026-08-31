@@ -1,36 +1,55 @@
+"use client";
+
 import Header from "@/app/Header";
-import ClientXPBar from "@/app/ClientXPBar"; // Ensure this reads 'aiXp' now
 import Link from "next/link";
+// We will build this canvas component next
+// import RuleBasedVisualizer from "@/components/canvas/RuleBasedVisualizer";
 
 export default function WhatIsAIPage() {
   return (
-    <main className="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <section className="bg-gray-900 p-8 rounded-xl shadow-2xl border border-purple-800/50 relative overflow-hidden">
-        {/* Subtle glow effect behind the text */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
+    <div className="flex h-full w-full flex-col overflow-hidden bg-slate-950 text-white">
+      <Header />
 
-        <h1 className="text-3xl font-bold mb-4 text-purple-300">
-          01. What is AI?
-        </h1>
-        <p className="text-gray-300 mb-6 leading-relaxed">
-          Standard programming requires explicit instructions. Machine Learning
-          inverses this paradigm: feed the algorithm data and answers, and it
-          calculates the mathematical rules itself.
-        </p>
+      <main className="flex-1 overflow-y-auto p-8">
+        <div className="mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Theory Section */}
+          <section className="flex flex-col justify-center rounded-xl border border-cyan-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
+            <div className="mb-2 text-sm font-bold tracking-widest text-cyan-500 uppercase">
+              AI Track • Level 0
+            </div>
+            <h1 className="mb-6 text-4xl font-extrabold text-slate-100">
+              The Learning Paradigm
+            </h1>
+            <p className="mb-6 text-lg leading-relaxed text-slate-300">
+              In standard computer science, you write explicit rules (code) to
+              process data and produce answers.
+            </p>
+            <p className="mb-8 text-lg leading-relaxed text-slate-300">
+              Artificial Intelligence inverses this paradigm. You feed the
+              machine the{" "}
+              <span className="font-semibold text-cyan-400">Data</span> and the{" "}
+              <span className="font-semibold text-cyan-400">Answers</span>, and
+              the machine calculates the{" "}
+              <span className="font-semibold text-cyan-400">Rules</span> itself.
+            </p>
 
-        <Link
-          href="/ai/what-is-ai/quiz"
-          className="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg font-semibold transition-all shadow-[0_0_15px_rgba(147,51,234,0.3)]"
-        >
-          Take Assessment (+100 AI XP)
-        </Link>
-      </section>
+            <Link
+              href="/ai/what-is-ai/quiz"
+              className="inline-flex w-fit items-center rounded-lg bg-cyan-600 px-6 py-3 font-semibold text-white transition-all hover:bg-cyan-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+            >
+              Take Assessment (+100 AI XP)
+            </Link>
+          </section>
 
-      <section className="bg-black rounded-xl overflow-hidden border border-purple-900/50 h-[500px] flex items-center justify-center">
-        <span className="text-purple-700 font-mono text-sm animate-pulse">
-          [ Canvas: RuleBasedVisualizer mounting... ]
-        </span>
-      </section>
-    </main>
+          {/* Visualizer Section */}
+          <section className="relative flex min-h-[500px] items-center justify-center rounded-xl border border-slate-800 bg-black overflow-hidden shadow-2xl">
+            <span className="font-mono text-sm text-cyan-700 animate-pulse">
+              [ Canvas: RuleBasedVisualizer mounting... ]
+            </span>
+            {/* <RuleBasedVisualizer /> */}
+          </section>
+        </div>
+      </main>
+    </div>
   );
 }

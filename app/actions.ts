@@ -1,27 +1,40 @@
 "use server";
 
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../lib/prisma";
+import { auth } from "@/auth"; // Assuming you use Auth.js based on your directory tree
 
-export async function saveProgressToDB(moduleId: string, xpReward: number) {
+type Track = "cs" | "ai" | "cyber";
+
+export async function saveProgressToDB(
+  moduleId: string,
+  xpReward: number,
+  track: Track = "cs",
+) {
   const session = await auth();
 
-  // If they aren't logged in, we do nothing
-  if (!session?.user?.email) return;
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized: User not logged in");
+  }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+  // Dynamically target the correct column (csXp, aiXp, or cyberXp)
+  const trackField = `${track}Xp`;
 
-  if (!user) return;
-  if (user.completedModules.includes(moduleId)) return; // Prevent cheating
-
-  // Save to Neon Postgres!
-  await prisma.user.update({
-    where: { email: session.user.email },
-    data: {
-      xp: { increment: xpReward },
-      completedModules: { push: moduleId },
-    },
-  });
+  try {
+    await prisma.user.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        // Increment the global XP
+        xp: { increment: xpReward },
+        // Increment the specific track's XP
+        [trackField]: { increment: xpReward },
+        // Append the module to the completed list (if tracked in DB)
+        // completedModules: { push: moduleId }
+      },
+    });
+  } catch (error) {
+    console.error("Failed to save progress to database:", error);
+    throw new Error("Database sync failed");
+  }
 }
