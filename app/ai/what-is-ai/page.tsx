@@ -1,14 +1,11 @@
 "use client";
 
-import Header from "@/app/Header";
 import Link from "next/link";
 import RuleBasedVisualizer from "@/components/canvas/RuleBasedVisualizer";
 
 export default function WhatIsAIPage() {
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-slate-950 text-white">
-      <Header />
-
+    <div className="flex h-full w-full flex-col overflow-hidden text-white">
       <main className="flex-1 overflow-y-auto p-8">
         <div className="mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-2">
           <section className="flex flex-col justify-center rounded-xl border border-cyan-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
