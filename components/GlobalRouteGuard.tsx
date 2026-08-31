@@ -2,16 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useStore } from "../store/useStore";
+import { useStore } from "../store/useStore"; // Ensure useStore exports csXp, aiXp, cyberXp
 
-const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; label: string }> =
-  {
-    "/trees": { minXP: 50, label: "Trees & Hierarchical Structures" },
-    "/graphs": { minXP: 100, label: "Graphs & Networks" },
-    "/dp": { minXP: 150, label: "Dynamic Programming" },
-    "/quiz/trees": { minXP: 50, label: "Trees Quiz" },
-    "/quiz/graphs": { minXP: 100, label: "Graphs Quiz" },
-  };
+type TrackXP = "csXp" | "aiXp" | "cyberXp";
+
+const ROUTE_XP_REQUIREMENTS: Record<
+  string,
+  { minXP: number; track: TrackXP; label: string }
+> = {
+  // CS Track (Legacy)
+  "/trees": {
+    minXP: 50,
+    track: "csXp",
+    label: "Trees & Hierarchical Structures",
+  },
+  "/graphs": { minXP: 100, track: "csXp", label: "Graphs & Networks" },
+  "/dp": { minXP: 150, track: "csXp", label: "Dynamic Programming" },
+  "/quiz/trees": { minXP: 50, track: "csXp", label: "Trees Quiz" },
+  "/quiz/graphs": { minXP: 100, track: "csXp", label: "Graphs Quiz" },
+
+  // AI Track
+  "/ai/vectors-and-matrices": {
+    minXP: 100,
+    track: "aiXp",
+    label: "Vectors & Matrices",
+  },
+  "/ai/linear-regression": {
+    minXP: 250,
+    track: "aiXp",
+    label: "Linear Regression",
+  },
+
+  // Cyber Track
+  "/cyber/classical-ciphers": {
+    minXP: 100,
+    track: "cyberXp",
+    label: "Classical Ciphers",
+  },
+};
 
 export default function GlobalRouteGuard({
   children,
@@ -20,7 +48,7 @@ export default function GlobalRouteGuard({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { xp } = useStore();
+  const store = useStore();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -32,9 +60,11 @@ export default function GlobalRouteGuard({
     pathname.startsWith(route),
   );
 
-  // Calculate lock condition safely
+  // Calculate lock condition safely checking the specific track's XP
   const isLocked = Boolean(
-    isMounted && matchedRoute && xp < matchedRoute[1].minXP,
+    isMounted &&
+    matchedRoute &&
+    store[matchedRoute[1].track] < matchedRoute[1].minXP,
   );
 
   // PLACE ALL HOOKS HERE - Safely at the top level!
