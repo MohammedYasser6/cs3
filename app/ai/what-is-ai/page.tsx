@@ -2,8 +2,7 @@
 
 import Header from "@/app/Header";
 import Link from "next/link";
-// We will build this canvas component next
-// import RuleBasedVisualizer from "@/components/canvas/RuleBasedVisualizer";
+import RuleBasedVisualizer from "@/components/canvas/RuleBasedVisualizer";
 
 export default function WhatIsAIPage() {
   return (
@@ -12,7 +11,6 @@ export default function WhatIsAIPage() {
 
       <main className="flex-1 overflow-y-auto p-8">
         <div className="mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* Theory Section */}
           <section className="flex flex-col justify-center rounded-xl border border-cyan-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
             <div className="mb-2 text-sm font-bold tracking-widest text-cyan-500 uppercase">
               AI Track • Level 0
@@ -28,8 +26,8 @@ export default function WhatIsAIPage() {
               Artificial Intelligence inverses this paradigm. You feed the
               machine the{" "}
               <span className="font-semibold text-cyan-400">Data</span> and the{" "}
-              <span className="font-semibold text-cyan-400">Answers</span>, and
-              the machine calculates the{" "}
+              <span className="font-semibold text-purple-400">Answers</span>,
+              and the machine calculates the{" "}
               <span className="font-semibold text-cyan-400">Rules</span> itself.
             </p>
 
@@ -41,12 +39,8 @@ export default function WhatIsAIPage() {
             </Link>
           </section>
 
-          {/* Visualizer Section */}
           <section className="relative flex min-h-[500px] items-center justify-center rounded-xl border border-slate-800 bg-black overflow-hidden shadow-2xl">
-            <span className="font-mono text-sm text-cyan-700 animate-pulse">
-              [ Canvas: RuleBasedVisualizer mounting... ]
-            </span>
-            {/* <RuleBasedVisualizer /> */}
+            <RuleBasedVisualizer />
           </section>
         </div>
       </main>
