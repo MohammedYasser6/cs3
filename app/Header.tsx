@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import { UserCircle, LogIn } from "lucide-react";
-import { useSession } from "next-auth/react"; // Assuming NextAuth
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export default function Header() {
   const pathname = usePathname();
@@ -15,7 +16,6 @@ export default function Header() {
   const isCyber = pathname.startsWith("/cyber");
   const isCS = !isAI && !isCyber && pathname !== "/" && pathname !== "/profile";
 
-  // Calculate track progress (Assumes ~1000 XP per track level for the visual bar)
   const activeXp = isAI ? aiXp : isCyber ? cyberXp : csXp;
   const progressPercent = Math.min((activeXp % 1000) / 10, 100);
 
@@ -64,7 +64,6 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-6">
-        {/* Visual XP Bar */}
         {(isCS || isAI || isCyber) && (
           <div className="hidden flex-col items-end md:flex">
             <div className="mb-1 flex w-40 justify-between text-xs font-bold">
@@ -82,13 +81,25 @@ export default function Header() {
           </div>
         )}
 
-        {/* Authentication / Profile Toggle */}
         {session ? (
           <Link
             href="/profile"
-            className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:border-cyan-500 hover:bg-slate-700"
+            className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800 p-1 pr-3 text-sm font-semibold text-slate-200 transition-colors hover:border-cyan-500"
           >
-            <UserCircle className="h-5 w-5" /> Profile
+            {session.user?.image ? (
+              <Image
+                src={session.user.image}
+                alt="Profile"
+                width={28}
+                height={28}
+                className="rounded-full"
+              />
+            ) : (
+              <UserCircle className="h-7 w-7 text-slate-400" />
+            )}
+            <span className="hidden sm:inline">
+              {session.user?.name?.split(" ")[0] || "Profile"}
+            </span>
           </Link>
         ) : (
           <Link

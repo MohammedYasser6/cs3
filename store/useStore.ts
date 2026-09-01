@@ -5,7 +5,7 @@ import { saveProgressToDB } from "../app/actions";
 export type Track = "cs" | "ai" | "cyber";
 
 interface StoreState {
-  xp: number; // Global Total XP
+  xp: number;
   csXp: number;
   aiXp: number;
   cyberXp: number;
@@ -13,6 +13,7 @@ interface StoreState {
   completedModules: string[];
   completeModule: (moduleId: string, xpReward: number, track?: Track) => void;
   resetProgress: () => void;
+  resetSession: () => void; // Completely clears local store on logout
   syncFromDB: (
     dbXP: number,
     dbModules: string[],
@@ -62,6 +63,20 @@ export const useStore = create<StoreState>()(
       resetProgress: () => {
         if (typeof document !== "undefined")
           document.cookie = "user_xp=0; path=/; max-age=0; SameSite=Lax";
+        set({
+          xp: 0,
+          csXp: 0,
+          aiXp: 0,
+          cyberXp: 0,
+          level: 1,
+          completedModules: [],
+        });
+      },
+
+      resetSession: () => {
+        if (typeof document !== "undefined")
+          document.cookie = "user_xp=0; path=/; max-age=0; SameSite=Lax";
+        localStorage.removeItem("cs3-storage"); // Clears persistent Zustand cache entirely
         set({
           xp: 0,
           csXp: 0,

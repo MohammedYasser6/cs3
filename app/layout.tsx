@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import Header from "./Header";
 import GlobalRouteGuard from "../components/GlobalRouteGuard";
 import AuthProvider from "../components/AuthProvider";
+import SyncUserProgress from "../components/SyncUserProgress"; // Import the sync component
 
 export const metadata = {
   title: "CS³ | Interactive Visualizer",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className="flex h-screen w-screen flex-col overflow-hidden bg-slate-950 selection:bg-cyan-500 selection:text-white"
       >
         <AuthProvider>
+          <SyncUserProgress />
           <Header />
 
           <main className="relative flex-1 overflow-hidden bg-slate-950">

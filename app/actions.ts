@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "../lib/prisma";
-import { auth } from "@/auth"; // Assuming you use Auth.js based on your directory tree
+import { auth } from "@/auth";
 
 type Track = "cs" | "ai" | "cyber";
 
@@ -16,7 +16,6 @@ export async function saveProgressToDB(
     throw new Error("Unauthorized: User not logged in");
   }
 
-  // Dynamically target the correct column (csXp, aiXp, or cyberXp)
   const trackField = `${track}Xp`;
 
   try {
@@ -25,16 +24,29 @@ export async function saveProgressToDB(
         email: session.user.email,
       },
       data: {
-        // Increment the global XP
         xp: { increment: xpReward },
-        // Increment the specific track's XP
         [trackField]: { increment: xpReward },
-        // Append the module to the completed list (if tracked in DB)
-        // completedModules: { push: moduleId }
       },
     });
   } catch (error) {
     console.error("Failed to save progress to database:", error);
     throw new Error("Database sync failed");
+  }
+}
+
+export async function getUserProgressFromDB() {
+  const session = await auth();
+  if (!session?.user?.email) return null;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { xp: true, csXp: true, aiXp: true, cyberXp: true },
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Failed to fetch user progress from database:", error);
+    return null;
   }
 }
