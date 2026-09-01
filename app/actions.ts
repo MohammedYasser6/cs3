@@ -3,7 +3,7 @@
 import { prisma } from "../lib/prisma";
 import { auth } from "@/auth";
 
-type Track = "cs" | "ai" | "cyber";
+type Track = "cs" | "ai" | "cyber" | "swe";
 
 export async function saveProgressToDB(
   moduleId: string,

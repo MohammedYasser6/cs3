@@ -4,10 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStore, Track } from "@/store/useStore";
+// Add 'Component' here!
 import {
   Brain,
   Code2,
   Shield,
+  Component,
   CheckCircle,
   XCircle,
   ArrowRight,
@@ -17,7 +19,7 @@ import {
 export interface QuizQuestion {
   question: string;
   options: string[];
-  correctAnswer: number; // Index of the correct option
+  correctAnswer: number;
 }
 
 interface QuizEngineProps {
@@ -28,7 +30,7 @@ interface QuizEngineProps {
   passingScore: number;
   questions: QuizQuestion[];
   returnPath: string;
-  nextModulePath?: string; // Optional: Link to the next track if they pass
+  nextModulePath?: string;
 }
 
 export default function QuizEngine({
@@ -51,7 +53,7 @@ export default function QuizEngine({
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  // Dynamic Theme Mapping based on Track
+  // Dynamic Theme Mapping
   const theme = {
     cs: {
       color: "blue",
@@ -77,6 +79,14 @@ export default function QuizEngine({
       border: "border-emerald-500",
       Icon: Shield,
     },
+    swe: {
+      color: "amber",
+      text: "text-amber-500",
+      bg: "bg-amber-600",
+      hover: "hover:bg-amber-500",
+      border: "border-amber-500",
+      Icon: Component,
+    },
   }[track];
 
   const Icon = theme.Icon;
@@ -98,7 +108,6 @@ export default function QuizEngine({
       const finalScore =
         score + (selectedOption === currentQ.correctAnswer ? 1 : 0);
 
-      // Centralized Anti-Farming & XP Logic
       if (finalScore >= passingScore && !isAlreadyCompleted) {
         completeModule(moduleId, xpReward, track);
       }

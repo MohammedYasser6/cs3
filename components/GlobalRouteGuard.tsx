@@ -51,6 +51,12 @@ const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; track: TrackXP }> =
     "/ai/nlp-rnns": { minXP: 1200, track: "aiXp" },
     "/ai/transformers": { minXP: 1450, track: "aiXp" },
     "/ai/generative-ai": { minXP: 1750, track: "aiXp" },
+    // --- SWE TRACK ---
+    "/swe/srs-requirements": { minXP: 100, track: "sweXp" },
+    "/swe/solid-principles": { minXP: 250, track: "sweXp" },
+    "/swe/structural-patterns": { minXP: 400, track: "sweXp" },
+    "/swe/behavioral-patterns": { minXP: 600, track: "sweXp" },
+    "/swe/creational-patterns": { minXP: 800, track: "sweXp" },
   };
 
 export default function GlobalRouteGuard({

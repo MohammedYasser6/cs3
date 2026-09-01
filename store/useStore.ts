@@ -2,13 +2,14 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { saveProgressToDB } from "../app/actions";
 
-export type Track = "cs" | "ai" | "cyber";
+export type Track = "cs" | "ai" | "cyber" | "swe";
 
 interface StoreState {
   xp: number;
   csXp: number;
   aiXp: number;
   cyberXp: number;
+  sweXp: number;
   level: number;
   completedModules: string[];
   completeModule: (moduleId: string, xpReward: number, track?: Track) => void;
@@ -20,6 +21,7 @@ interface StoreState {
     dbCsXp?: number,
     dbAiXp?: number,
     dbCyberXp?: number,
+    dbSweXp?: number,
   ) => void;
 }
 
@@ -30,6 +32,7 @@ export const useStore = create<StoreState>()(
       csXp: 0,
       aiXp: 0,
       cyberXp: 0,
+      sweXp: 0,
       level: 1,
       completedModules: [],
 
@@ -68,6 +71,7 @@ export const useStore = create<StoreState>()(
           csXp: 0,
           aiXp: 0,
           cyberXp: 0,
+          sweXp: 0,
           level: 1,
           completedModules: [],
         });
@@ -82,12 +86,20 @@ export const useStore = create<StoreState>()(
           csXp: 0,
           aiXp: 0,
           cyberXp: 0,
+          sweXp: 0,
           level: 1,
           completedModules: [],
         });
       },
 
-      syncFromDB: (dbXP, dbModules, dbCsXp = 0, dbAiXp = 0, dbCyberXp = 0) => {
+      syncFromDB: (
+        dbXP,
+        dbModules,
+        dbCsXp = 0,
+        dbAiXp = 0,
+        dbCyberXp = 0,
+        dbSweXp = 0,
+      ) => {
         if (typeof document !== "undefined")
           document.cookie = `user_xp=${dbXP}; path=/; max-age=2592000; SameSite=Lax`;
         const safeCsXp = dbCsXp === 0 && dbXP > 0 ? dbXP : dbCsXp;
@@ -96,6 +108,7 @@ export const useStore = create<StoreState>()(
           csXp: safeCsXp,
           aiXp: dbAiXp,
           cyberXp: dbCyberXp,
+          sweXp: dbSweXp,
           completedModules: dbModules,
           level: Math.floor(dbXP / 100) + 1,
         });
@@ -103,10 +116,13 @@ export const useStore = create<StoreState>()(
     }),
     {
       name: "cs3-storage",
-      version: 1,
+      version: 2, // Bumped to 2 for SWE track migration
       migrate: (persistedState: any, version: number) => {
         if (version === 0) {
           persistedState.csXp = persistedState.xp || 0;
+        }
+        if (version < 2) {
+          persistedState.sweXp = 0;
         }
         return persistedState;
       },
