@@ -32,8 +32,25 @@ const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; track: TrackXP }> =
     "/search": { minXP: 450, track: "csXp" },
 
     // AI Track
+    // --- AI TRACK ---
     "/ai/vectors-and-matrices": { minXP: 100, track: "aiXp" },
     "/ai/linear-regression": { minXP: 250, track: "aiXp" },
+
+    // Classical ML
+    "/ai/overfitting": { minXP: 400, track: "aiXp" },
+    "/ai/overfitting/quiz": { minXP: 400, track: "aiXp" },
+    "/ai/clustering": { minXP: 600, track: "aiXp" },
+    "/ai/clustering/quiz": { minXP: 600, track: "aiXp" },
+
+    // Deep Learning
+    "/ai/deep-learning": { minXP: 800, track: "aiXp" },
+    "/ai/deep-learning/quiz": { minXP: 800, track: "aiXp" },
+
+    // Advanced Topics
+    "/ai/computer-vision": { minXP: 1000, track: "aiXp" },
+    "/ai/nlp-rnns": { minXP: 1200, track: "aiXp" },
+    "/ai/transformers": { minXP: 1450, track: "aiXp" },
+    "/ai/generative-ai": { minXP: 1750, track: "aiXp" },
   };
 
 export default function GlobalRouteGuard({

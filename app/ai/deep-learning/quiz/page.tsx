@@ -13,42 +13,43 @@ import {
 
 const QUESTIONS = [
   {
-    question: "In the equation y = mx + b, what does the weight (m) represent?",
+    question:
+      "Why are activation functions (like Sigmoid or ReLU) required in hidden layers?",
     options: [
-      "The y-intercept",
-      "The slope or steepness of the best-fit line",
-      "The error rate",
-      "The learning rate",
+      "To speed up training time",
+      "To allow the network to learn non-linear patterns",
+      "To prevent the GPU from overheating",
+      "To convert data into SQL tables",
     ],
     correct: 1,
   },
   {
-    question: "What is the primary purpose of the bias term (b)?",
+    question: "What is Backpropagation?",
     options: [
-      "To shift the line up or down the y-axis to better fit data",
-      "To randomly scramble inputs",
-      "To increase computational speed",
-      "To convert numbers to text",
+      "The process of moving data backwards to calculate error gradients and update weights",
+      "The forward pass of input data",
+      "A type of activation function",
+      "Deleting old training data",
     ],
     correct: 0,
   },
   {
     question:
-      "What metric is typically minimized during linear regression training?",
+      "If a neural network has an input layer, two hidden layers, and an output layer, how many layers deep is it considered?",
     options: [
-      "Matrix Dimensions",
-      "Screen Resolution",
-      "Mean Squared Error (Loss)",
-      "Data File Size",
+      "1 layer",
+      "2 layers",
+      "3 layers (Input isn't counted in depth)",
+      "4 layers",
     ],
     correct: 2,
   },
 ];
 
-export default function LinearRegressionQuiz() {
+export default function DeepLearningQuiz() {
   const router = useRouter();
   const { completeModule, completedModules } = useStore();
-  const moduleId = "linear-regression";
+  const moduleId = "deep-learning";
   const isAlreadyCompleted = completedModules?.includes(moduleId) ?? false;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -75,7 +76,7 @@ export default function LinearRegressionQuiz() {
       setFinished(true);
       const finalScore = score + (selected === currentQ.correct ? 1 : 0);
       if (finalScore >= passingScore && !isAlreadyCompleted) {
-        completeModule(moduleId, 250, "ai");
+        completeModule(moduleId, 400, "ai");
       }
     }
   };
@@ -95,7 +96,7 @@ export default function LinearRegressionQuiz() {
           <div className="flex items-center gap-3">
             <Brain className="h-6 w-6 text-purple-400" />
             <h1 className="text-xl font-bold text-slate-100">
-              Linear Regression Exam
+              Deep Learning Exam
             </h1>
           </div>
           {!finished && (
@@ -122,7 +123,7 @@ export default function LinearRegressionQuiz() {
                   </p>
                 ) : (
                   <p className="mt-2 font-bold text-purple-400">
-                    +250 AI XP Earned!
+                    +400 AI XP Earned!
                   </p>
                 )}
               </>

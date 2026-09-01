@@ -13,42 +13,44 @@ import {
 
 const QUESTIONS = [
   {
-    question: "In the equation y = mx + b, what does the weight (m) represent?",
+    question:
+      "What exactly happens when a machine learning model 'overfits' the data?",
     options: [
-      "The y-intercept",
-      "The slope or steepness of the best-fit line",
-      "The error rate",
-      "The learning rate",
+      "It becomes too simple and fails to learn any patterns at all.",
+      "It memorizes the training data, including random noise, causing it to fail on new, unseen data.",
+      "It deletes old training data to make room for new data.",
+      "It runs too quickly, skipping important calculations.",
     ],
     correct: 1,
   },
   {
-    question: "What is the primary purpose of the bias term (b)?",
+    question:
+      "If a model performs poorly on BOTH its training data AND the test data, what is it likely suffering from?",
     options: [
-      "To shift the line up or down the y-axis to better fit data",
-      "To randomly scramble inputs",
-      "To increase computational speed",
-      "To convert numbers to text",
+      "Overfitting (High Variance)",
+      "Underfitting (High Bias)",
+      "Optimal Fit",
+      "Regularization",
     ],
-    correct: 0,
+    correct: 1,
   },
   {
     question:
-      "What metric is typically minimized during linear regression training?",
+      "Which of the following is a common Regularization technique used to prevent overfitting in neural networks?",
     options: [
-      "Matrix Dimensions",
-      "Screen Resolution",
-      "Mean Squared Error (Loss)",
-      "Data File Size",
+      "Increasing the learning rate infinitely",
+      "Using a smaller dataset",
+      "Dropout (randomly turning off neurons during training)",
+      "Removing the activation functions entirely",
     ],
     correct: 2,
   },
 ];
 
-export default function LinearRegressionQuiz() {
+export default function OverfittingQuiz() {
   const router = useRouter();
   const { completeModule, completedModules } = useStore();
-  const moduleId = "linear-regression";
+  const moduleId = "overfitting";
   const isAlreadyCompleted = completedModules?.includes(moduleId) ?? false;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -75,7 +77,7 @@ export default function LinearRegressionQuiz() {
       setFinished(true);
       const finalScore = score + (selected === currentQ.correct ? 1 : 0);
       if (finalScore >= passingScore && !isAlreadyCompleted) {
-        completeModule(moduleId, 250, "ai");
+        completeModule(moduleId, 200, "ai");
       }
     }
   };
@@ -95,7 +97,7 @@ export default function LinearRegressionQuiz() {
           <div className="flex items-center gap-3">
             <Brain className="h-6 w-6 text-purple-400" />
             <h1 className="text-xl font-bold text-slate-100">
-              Linear Regression Exam
+              Overfitting & Regularization Exam
             </h1>
           </div>
           {!finished && (
@@ -122,7 +124,7 @@ export default function LinearRegressionQuiz() {
                   </p>
                 ) : (
                   <p className="mt-2 font-bold text-purple-400">
-                    +250 AI XP Earned!
+                    +200 AI XP Earned!
                   </p>
                 )}
               </>

@@ -13,42 +13,43 @@ import {
 
 const QUESTIONS = [
   {
-    question: "In the equation y = mx + b, what does the weight (m) represent?",
+    question:
+      "What is the primary difference between Supervised and Unsupervised learning?",
     options: [
-      "The y-intercept",
-      "The slope or steepness of the best-fit line",
-      "The error rate",
-      "The learning rate",
+      "Supervised learning requires humans to write explicit if/else code.",
+      "Unsupervised learning uses labeled data, while Supervised learning does not.",
+      "Supervised learning trains on data with known labels/answers, while Unsupervised learning finds patterns in unlabeled data.",
+      "Unsupervised learning can only be run on quantum computers.",
+    ],
+    correct: 2,
+  },
+  {
+    question: "In the K-Means algorithm, what does 'K' represent?",
+    options: [
+      "The learning rate of the algorithm.",
+      "The number of clusters (centroids) the algorithm will attempt to find.",
+      "The number of dimensions in the tensor.",
+      "A constant math variable equal to 1000.",
     ],
     correct: 1,
   },
   {
-    question: "What is the primary purpose of the bias term (b)?",
-    options: [
-      "To shift the line up or down the y-axis to better fit data",
-      "To randomly scramble inputs",
-      "To increase computational speed",
-      "To convert numbers to text",
-    ],
-    correct: 0,
-  },
-  {
     question:
-      "What metric is typically minimized during linear regression training?",
+      "During the update step of K-Means clustering, how do the centroids move?",
     options: [
-      "Matrix Dimensions",
-      "Screen Resolution",
-      "Mean Squared Error (Loss)",
-      "Data File Size",
+      "They move completely randomly.",
+      "They move to the exact physical average (mean) center of all the data points assigned to them.",
+      "They repel each other until they hit the edges of the graph.",
+      "They delete data points that are too far away.",
     ],
-    correct: 2,
+    correct: 1,
   },
 ];
 
-export default function LinearRegressionQuiz() {
+export default function ClusteringQuiz() {
   const router = useRouter();
   const { completeModule, completedModules } = useStore();
-  const moduleId = "linear-regression";
+  const moduleId = "clustering";
   const isAlreadyCompleted = completedModules?.includes(moduleId) ?? false;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -75,7 +76,7 @@ export default function LinearRegressionQuiz() {
       setFinished(true);
       const finalScore = score + (selected === currentQ.correct ? 1 : 0);
       if (finalScore >= passingScore && !isAlreadyCompleted) {
-        completeModule(moduleId, 250, "ai");
+        completeModule(moduleId, 200, "ai");
       }
     }
   };
@@ -95,7 +96,7 @@ export default function LinearRegressionQuiz() {
           <div className="flex items-center gap-3">
             <Brain className="h-6 w-6 text-purple-400" />
             <h1 className="text-xl font-bold text-slate-100">
-              Linear Regression Exam
+              Unsupervised Clustering Exam
             </h1>
           </div>
           {!finished && (
@@ -122,7 +123,7 @@ export default function LinearRegressionQuiz() {
                   </p>
                 ) : (
                   <p className="mt-2 font-bold text-purple-400">
-                    +250 AI XP Earned!
+                    +200 AI XP Earned!
                   </p>
                 )}
               </>
