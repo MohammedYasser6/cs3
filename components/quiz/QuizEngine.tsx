@@ -1,0 +1,265 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useStore, Track } from "@/store/useStore";
+import {
+  Brain,
+  Code2,
+  Shield,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
+  RotateCcw,
+} from "lucide-react";
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number; // Index of the correct option
+}
+
+interface QuizEngineProps {
+  title: string;
+  moduleId: string;
+  track: Track;
+  xpReward: number;
+  passingScore: number;
+  questions: QuizQuestion[];
+  returnPath: string;
+  nextModulePath?: string; // Optional: Link to the next track if they pass
+}
+
+export default function QuizEngine({
+  title,
+  moduleId,
+  track,
+  xpReward,
+  passingScore,
+  questions,
+  returnPath,
+  nextModulePath,
+}: QuizEngineProps) {
+  const router = useRouter();
+  const { completeModule, completedModules } = useStore();
+  const isAlreadyCompleted = completedModules?.includes(moduleId) ?? false;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
+  const [score, setScore] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  // Dynamic Theme Mapping based on Track
+  const theme = {
+    cs: {
+      color: "blue",
+      text: "text-blue-400",
+      bg: "bg-blue-600",
+      hover: "hover:bg-blue-500",
+      border: "border-blue-500",
+      Icon: Code2,
+    },
+    ai: {
+      color: "purple",
+      text: "text-purple-400",
+      bg: "bg-purple-600",
+      hover: "hover:bg-purple-500",
+      border: "border-purple-500",
+      Icon: Brain,
+    },
+    cyber: {
+      color: "emerald",
+      text: "text-emerald-400",
+      bg: "bg-emerald-600",
+      hover: "hover:bg-emerald-500",
+      border: "border-emerald-500",
+      Icon: Shield,
+    },
+  }[track];
+
+  const Icon = theme.Icon;
+  const currentQ = questions[currentIndex];
+
+  const checkAnswer = () => {
+    if (selectedOption === null) return;
+    if (selectedOption === currentQ.correctAnswer) setScore((s) => s + 1);
+    setIsAnswerChecked(true);
+  };
+
+  const nextQuestion = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex((i) => i + 1);
+      setSelectedOption(null);
+      setIsAnswerChecked(false);
+    } else {
+      setIsFinished(true);
+      const finalScore =
+        score + (selectedOption === currentQ.correctAnswer ? 1 : 0);
+
+      // Centralized Anti-Farming & XP Logic
+      if (finalScore >= passingScore && !isAlreadyCompleted) {
+        completeModule(moduleId, xpReward, track);
+      }
+    }
+  };
+
+  const handleRetake = () => {
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setIsAnswerChecked(false);
+    setScore(0);
+    setIsFinished(false);
+  };
+
+  if (isFinished) {
+    const passed = score >= passingScore;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 p-6 text-slate-200">
+        <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-10 text-center shadow-2xl">
+          <h2 className="mb-4 text-3xl font-bold text-white">Exam Complete!</h2>
+          <p className="mb-6 text-6xl">{passed ? "🎉" : "❌"}</p>
+          <p className="mb-2 text-xl text-slate-300">
+            You scored:{" "}
+            <span className="font-bold text-white">
+              {score} / {questions.length}
+            </span>
+          </p>
+
+          {passed ? (
+            isAlreadyCompleted ? (
+              <p className="mb-8 font-semibold text-slate-500">
+                XP already claimed previously.
+              </p>
+            ) : (
+              <p className={`mb-8 font-bold ${theme.text}`}>
+                +{xpReward} {track.toUpperCase()} XP Awarded!
+              </p>
+            )
+          ) : (
+            <p className="mb-8 font-bold text-rose-400">
+              You need {passingScore} correct to pass.
+            </p>
+          )}
+
+          <div className="flex flex-col gap-3">
+            {!passed && (
+              <button
+                onClick={handleRetake}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800 py-3 font-bold text-white transition hover:bg-slate-700"
+              >
+                <RotateCcw className="h-4 w-4" /> Retake Exam
+              </button>
+            )}
+            {passed && nextModulePath && (
+              <Link
+                href={nextModulePath}
+                className={`block w-full rounded-lg py-3 font-bold text-white transition ${theme.bg} ${theme.hover}`}
+              >
+                Next Module →
+              </Link>
+            )}
+            <Link
+              href={returnPath}
+              className="block w-full rounded-lg border border-slate-700 bg-slate-800 py-3 font-bold text-white transition hover:bg-slate-700"
+            >
+              Return to Track Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 p-6 text-slate-200">
+      <div className="w-full max-w-2xl">
+        <div className="mb-8 flex items-end justify-between">
+          <div className="flex items-center gap-3">
+            <Icon className={`h-6 w-6 ${theme.text}`} />
+            <h1 className="text-xl font-bold text-slate-100">{title}</h1>
+          </div>
+          <p className="font-mono text-sm font-medium text-slate-500">
+            Q {currentIndex + 1} / {questions.length}
+          </p>
+        </div>
+
+        <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
+          <h2 className="mb-8 text-xl font-bold text-white leading-relaxed">
+            {currentQ.question}
+          </h2>
+          <div className="space-y-3">
+            {currentQ.options.map((option, index) => {
+              const isSelected = selectedOption === index;
+              const isCorrect = index === currentQ.correctAnswer;
+
+              let btnClass =
+                "w-full text-left p-4 rounded-xl border-2 transition-all font-medium ";
+
+              if (!isAnswerChecked) {
+                btnClass += isSelected
+                  ? `${theme.border} bg-${theme.color}-500/10 text-white`
+                  : "border-slate-700 bg-slate-800 text-slate-300 hover:border-slate-500 hover:bg-slate-700";
+              } else {
+                if (isCorrect)
+                  btnClass +=
+                    "border-emerald-500 bg-emerald-500/10 text-emerald-400";
+                else if (isSelected)
+                  btnClass += "border-rose-500 bg-rose-500/10 text-rose-400";
+                else
+                  btnClass +=
+                    "border-slate-800 bg-slate-900 text-slate-600 opacity-50";
+              }
+
+              return (
+                <button
+                  key={index}
+                  disabled={isAnswerChecked}
+                  onClick={() => setSelectedOption(index)}
+                  className={btnClass}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t border-slate-800 pt-6">
+          {isAnswerChecked ? (
+            <span
+              className={`font-bold ${selectedOption === currentQ.correctAnswer ? "text-emerald-400" : "text-rose-400"}`}
+            >
+              {selectedOption === currentQ.correctAnswer
+                ? "Correct!"
+                : "Incorrect."}
+            </span>
+          ) : (
+            <span />
+          )}
+
+          {!isAnswerChecked ? (
+            <button
+              onClick={checkAnswer}
+              disabled={selectedOption === null}
+              className="rounded-lg bg-slate-200 px-8 py-3 font-bold text-slate-900 transition hover:bg-white disabled:opacity-50"
+            >
+              Submit Answer
+            </button>
+          ) : (
+            <button
+              onClick={nextQuestion}
+              className={`flex items-center gap-2 rounded-lg px-8 py-3 font-bold text-white transition ${theme.bg} ${theme.hover}`}
+            >
+              {currentIndex === questions.length - 1
+                ? "Finish Exam"
+                : "Next Question"}{" "}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
