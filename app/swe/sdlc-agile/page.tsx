@@ -1,82 +1,137 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import WaterfallVisualizer from "@/components/canvas/Waterfall3DVisualizer";
+import AgileVisualizer from "@/components/canvas/AgileVisualizer";
 
-export default function SDLCModelsPage() {
+export default function SDLCPage() {
+  const [activeTab, setActiveTab] = useState<"waterfall" | "agile">("agile");
+
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden text-slate-200">
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 xl:grid-cols-2">
-          <section className="flex flex-col rounded-xl border border-amber-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
-            <div className="mb-2 text-sm font-bold tracking-widest text-amber-500 uppercase">
-              SWE Track • Level 1
-            </div>
-            <h1 className="mb-6 text-4xl font-extrabold text-slate-100">
-              SDLC Models: The Waterfall
-            </h1>
+    <section className="flex h-full w-full overflow-hidden">
+      {/* LEFT COLUMN: Docked Theory Sidebar */}
+      <div className="w-1/3 min-w-[350px] max-w-[500px] bg-slate-900 border-r border-slate-800 flex flex-col z-10 shadow-2xl animate-slide-up">
+        <div className="p-8 pb-0">
+          <p className="text-amber-500 font-bold tracking-widest uppercase text-sm mb-1">
+            SWE Track • Module 1
+          </p>
+          <h2 className="text-3xl font-bold text-white drop-shadow-md mb-6">
+            SDLC & Agile
+          </h2>
 
-            <div className="space-y-4 text-slate-300 leading-relaxed text-sm">
-              <p>
-                The{" "}
-                <strong className="text-amber-400">
-                  Software Development Life Cycle (SDLC)
-                </strong>{" "}
-                is the process used by the software industry to design, develop,
-                and test high-quality software.
-              </p>
-
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
-                <h3 className="mb-2 font-bold text-slate-100">
-                  The Traditional Approach: Waterfall
-                </h3>
-                <p className="mb-3 text-xs text-slate-400">
-                  Pioneered in the 1970s, Waterfall treats software like
-                  manufacturing a physical bridge. You complete one phase
-                  entirely before moving to the next. You never go backward.
-                </p>
-
-                <h4 className="font-bold text-rose-400 mt-4 mb-1">
-                  The Fatal Flaw
-                </h4>
-                <p className="text-xs text-slate-400 border-l-2 border-rose-500 pl-3">
-                  If you discover a fundamental design error during the
-                  "Testing" phase, flowing "back up" the waterfall to the
-                  "Design" phase is incredibly expensive. It assumes
-                  requirements never change. Use the{" "}
-                  <strong>Simulate Bug</strong> button in the visualizer to see
-                  this.
-                </p>
-              </div>
-
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
-                <h3 className="mb-2 font-bold text-slate-100">
-                  The Modern Solution: Agile
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Instead of one massive 2-year waterfall, Agile methodologies
-                  (like Scrum) break development into 2-week "Sprints." The team
-                  runs tiny waterfalls rapidly, releasing small features and
-                  getting immediate client feedback so they can pivot easily.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <Link
-                href="/swe/sdlc-models/quiz"
-                className="inline-flex w-fit items-center rounded-lg bg-amber-600 px-6 py-3 font-semibold text-white shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:bg-amber-500 transition-all"
-              >
-                Take Assessment (+100 SWE XP)
-              </Link>
-            </div>
-          </section>
-
-          <section className="relative flex min-h-[600px] items-center justify-center overflow-hidden rounded-xl border border-slate-800 bg-black shadow-2xl xl:col-span-1">
-            <WaterfallVisualizer />
-          </section>
+          <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800 mb-6">
+            <button
+              onClick={() => setActiveTab("agile")}
+              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${
+                activeTab === "agile"
+                  ? "bg-amber-600 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              Agile (Scrum)
+            </button>
+            <button
+              onClick={() => setActiveTab("waterfall")}
+              className={`flex-1 py-2 text-sm font-bold rounded transition-colors ${
+                activeTab === "waterfall"
+                  ? "bg-slate-800 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              Waterfall
+            </button>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pt-0">
+          {activeTab === "agile" ? (
+            <div className="space-y-6 animate-fade-in text-sm leading-relaxed text-slate-300">
+              <div>
+                <h3 className="text-white font-bold mb-2 text-lg">
+                  Iterative Sprint Cycles:
+                </h3>
+                <p>
+                  Agile breaks monolithic projects into 2-week iterations called
+                  <strong> Sprints</strong>. Teams build small vertical slices,
+                  test them, and deploy them for immediate user feedback.
+                </p>
+              </div>
+
+              <div className="bg-slate-950 border border-slate-800 p-4 rounded-lg">
+                <h4 className="text-amber-400 font-bold mb-2 text-sm">
+                  Scrum Board Workflow:
+                </h4>
+                <ul className="space-y-2 list-disc pl-4 text-slate-300">
+                  <li>
+                    <strong>Backlog:</strong> Prioritized pool of user stories.
+                  </li>
+                  <li>
+                    <strong>In Progress:</strong> Active development limit per
+                    engineer.
+                  </li>
+                  <li>
+                    <strong>Code Review:</strong> Peer verification and CI
+                    testing.
+                  </li>
+                  <li>
+                    <strong className="text-emerald-400">Done:</strong> Shipped
+                    to staging/production.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6 animate-fade-in text-sm leading-relaxed text-slate-300">
+              <div>
+                <h3 className="text-white font-bold mb-2 text-lg">
+                  Sequential Waterfall:
+                </h3>
+                <p>
+                  A linear model where each phase must finish 100% before the
+                  next begins (Requirements → Design → Code → QA → Ops).
+                </p>
+              </div>
+
+              <div className="bg-slate-950 border border-rose-950/60 p-4 rounded-lg">
+                <h4 className="text-rose-400 font-bold mb-2 text-sm">
+                  The Late-Testing Flaw:
+                </h4>
+                <p className="text-xs text-slate-400">
+                  Verification happens at the very end. Finding a fundamental
+                  requirement error during QA forces a costly rewrite of all
+                  intervening phases.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* RIGHT COLUMN: Full Viewport Visualizer */}
+      <div className="flex-1 flex flex-col relative bg-slate-950 animate-fade-in">
+        <div className="flex-1 w-full h-full relative overflow-hidden">
+          {activeTab === "agile" ? (
+            <AgileVisualizer />
+          ) : (
+            <WaterfallVisualizer />
+          )}
+        </div>
+
+        {/* Bottom Action Bar */}
+        <div className="h-24 border-t border-slate-800 bg-slate-900 flex items-center justify-between px-8 z-10">
+          <p className="text-xs text-slate-400 font-mono">
+            Mode:{" "}
+            {activeTab === "agile" ? "Scrum Simulation" : "Waterfall Flow"}
+          </p>
+          <Link
+            href="/swe/sdlc-agile/quiz"
+            className="px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-bold transition shadow-md"
+          >
+            Take the Exam →
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }

@@ -7,7 +7,7 @@ const QUESTIONS = [
     options: [
       "Scalar Addition",
       "Matrix Multiplication",
-      "Boolean Logic Gates",
+      "Boolean Logic",
       "String Concatenation",
     ],
     correctAnswer: 1,
@@ -19,15 +19,15 @@ const QUESTIONS = [
       "As a 0D Scalar",
       "As a 1D String",
       "As a 2D Matrix of pixel intensities",
-      "As a SQL database",
+      "As a SQL table",
     ],
     correctAnswer: 2,
   },
   {
     question: "What is a Tensor?",
     options: [
-      "A hardware cooling device",
-      "A mathematical array of numbers (N-dimensional)",
+      "A hardware cooling fan",
+      "An N-dimensional mathematical array of numbers",
       "A web framework",
       "A string formatting tool",
     ],
@@ -35,10 +35,10 @@ const QUESTIONS = [
   },
 ];
 
-export default function VectorsAndMatricesQuiz() {
+export default function VectorsQuiz() {
   return (
     <QuizEngine
-      title="Level 1 • Vectors & Matrices Exam"
+      title="Level 1 • Vectors Exam"
       moduleId="vectors-and-matrices"
       track="ai"
       xpReward={150}

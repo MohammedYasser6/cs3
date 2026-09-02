@@ -106,7 +106,7 @@ function KMeansVisualizer() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col bg-slate-950 text-slate-200 lg:flex-row overflow-hidden">
+    <div className="flex h-full w-full flex-col bg-slate-950 text-slate-200 lg:flex-row overflow-hidden rounded-xl">
       {/* Control Panel */}
       <div className="flex w-full flex-col gap-6 border-b border-slate-800 bg-slate-900/50 p-6 lg:w-72 lg:border-b-0 lg:border-r overflow-y-auto">
         <div>
@@ -187,11 +187,11 @@ function KMeansVisualizer() {
       </div>
 
       {/* SVG Canvas Workspace */}
-      <div className="relative flex-1 bg-black p-4 flex items-center justify-center">
+      <div className="relative flex-1 bg-black p-4 flex items-center justify-center min-h-[500px]">
         {points.length === 0 && (
           <div className="absolute flex flex-col items-center text-slate-500 pointer-events-none gap-2">
             <MousePointer2 className="h-8 w-8 animate-bounce text-cyan-500/50" />
-            <p className="font-mono text-sm">
+            <p className="font-mono text-sm text-center">
               Click anywhere on the canvas to drop data points
             </p>
           </div>
@@ -269,18 +269,22 @@ function KMeansVisualizer() {
 
 export default function ClusteringPage() {
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden text-slate-200">
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 xl:grid-cols-2">
-          <section className="flex flex-col rounded-xl border border-purple-900/30 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-sm">
+    <div className="flex h-full w-full flex-col overflow-x-hidden text-slate-200">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        
+        {/* NEW LAYOUT: Pure Vertical Stack (flex-col). No side-by-side columns. */}
+        <div className="mx-auto flex max-w-6xl flex-col gap-8">
+          
+          {/* TOP: Theory Section (Takes full width of the max-w-6xl container) */}
+          <section className="flex w-full flex-col rounded-xl border border-purple-900/30 bg-slate-900/50 p-6 md:p-8 shadow-2xl backdrop-blur-sm">
             <div className="mb-2 text-sm font-bold tracking-widest text-purple-500 uppercase">
               AI Track • Level 5
             </div>
-            <h1 className="mb-6 text-4xl font-extrabold text-slate-100">
+            <h1 className="mb-6 text-3xl font-extrabold text-slate-100 md:text-4xl">
               Unsupervised Clustering
             </h1>
 
-            <div className="space-y-4 text-slate-300 leading-relaxed text-sm">
+            <div className="space-y-4 text-slate-300 leading-relaxed text-sm md:text-base">
               <p>
                 Everything we have learned so far has been{" "}
                 <strong>Supervised Learning</strong>—where we know the correct
@@ -293,7 +297,7 @@ export default function ClusteringPage() {
                 hidden structures, categories, or anomalies entirely on its own.
               </p>
 
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
+              <div className="rounded-lg border border-slate-800 bg-slate-950 p-5">
                 <h3 className="mb-2 font-bold text-slate-100">
                   The K-Means Algorithm
                 </h3>
@@ -324,19 +328,21 @@ export default function ClusteringPage() {
               </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 flex justify-start">
               <Link
                 href="/ai/clustering/quiz"
-                className="inline-flex w-fit items-center rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:bg-purple-500"
+                className="inline-flex w-fit items-center justify-center rounded-lg bg-purple-600 px-8 py-3 font-semibold text-white shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:bg-purple-500 transition-all"
               >
                 Take Assessment (+200 AI XP)
               </Link>
             </div>
           </section>
 
-          <section className="relative flex min-h-[550px] items-center justify-center overflow-hidden rounded-xl border border-slate-800 bg-black shadow-2xl">
+          {/* BOTTOM: Visualizer Section (Full width, massive interactive area) */}
+          <section className="relative flex min-h-[650px] w-full flex-col overflow-hidden rounded-xl border border-slate-800 bg-black shadow-2xl">
             <KMeansVisualizer />
           </section>
+          
         </div>
       </main>
     </div>

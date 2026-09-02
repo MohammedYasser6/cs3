@@ -26,6 +26,7 @@ export async function saveProgressToDB(
       data: {
         xp: { increment: xpReward },
         [trackField]: { increment: xpReward },
+        completedModules: { push: moduleId }, // <-- CRITICAL: Save the module so they can't farm XP
       },
     });
   } catch (error) {
@@ -41,7 +42,15 @@ export async function getUserProgressFromDB() {
   try {
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { xp: true, csXp: true, aiXp: true, cyberXp: true },
+      // <-- CRITICAL: Added sweXp and completedModules so state restores on refresh
+      select: {
+        xp: true,
+        csXp: true,
+        aiXp: true,
+        cyberXp: true,
+        sweXp: true,
+        completedModules: true,
+      },
     });
 
     return user;

@@ -2,49 +2,49 @@ import QuizEngine from "@/components/quiz/QuizEngine";
 
 const QUESTIONS = [
   {
-    question: "In the equation y = mx + b, what does the weight (m) represent?",
+    question: "In the equation y = mx + b, what does the Weight (m) represent?",
     options: [
-      "The y-intercept",
-      "The slope or steepness of the best-fit line",
-      "The error rate",
-      "The learning rate",
+      "The y-intercept.",
+      "The slope, determining how heavily the input influences the output.",
+      "The error rate.",
+      "The learning rate.",
     ],
     correctAnswer: 1,
   },
   {
-    question: "What is the primary purpose of the bias term (b)?",
+    question: "What is the 'Loss' (or Error) in Machine Learning?",
     options: [
-      "To shift the line up or down the y-axis to better fit data",
-      "To randomly scramble inputs",
-      "To increase computational speed",
-      "To convert numbers to text",
+      "The time it takes to compile.",
+      "The physical size of the dataset.",
+      "The distance between the actual data points and the model's predicted line.",
+      "A memory leak.",
     ],
-    correctAnswer: 0,
+    correctAnswer: 2,
   },
   {
     question:
-      "What metric is typically minimized during linear regression training?",
+      "During training, what exactly is the algorithm adjusting to minimize the Loss?",
     options: [
-      "Matrix Dimensions",
-      "Screen Resolution",
-      "Mean Squared Error (Loss)",
-      "Data File Size",
+      "The input data itself.",
+      "The Weights and Biases.",
+      "The amount of RAM.",
+      "The user's database.",
     ],
-    correctAnswer: 2,
+    correctAnswer: 1,
   },
 ];
 
 export default function LinearRegressionQuiz() {
   return (
     <QuizEngine
-      title="Level 2 • Linear Regression Exam"
+      title="Level 2 • Regression Exam"
       moduleId="linear-regression"
       track="ai"
-      xpReward={250}
+      xpReward={150}
       passingScore={2}
       questions={QUESTIONS}
       returnPath="/ai"
-      nextModulePath="/ai/overfitting"
+      nextModulePath="/ai/deep-learning"
     />
   );
 }

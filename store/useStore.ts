@@ -14,7 +14,7 @@ interface StoreState {
   completedModules: string[];
   completeModule: (moduleId: string, xpReward: number, track?: Track) => void;
   resetProgress: () => void;
-  resetSession: () => void; // Completely clears local store on logout
+  resetSession: () => void;
   syncFromDB: (
     dbXP: number,
     dbModules: string[],
@@ -44,10 +44,15 @@ export const useStore = create<StoreState>()(
         const state = get();
         if (state.completedModules?.includes(moduleId)) return;
 
+        // Fire and forget DB save
         saveProgressToDB(moduleId, xpReward, track).catch(console.error);
 
+        // Safely extract the track XP using TypeScript key assertions
+        const trackKey = `${track}Xp` as keyof StoreState;
+        const currentTrackXP = (state[trackKey] as number) || 0;
+
         const newTotalXP = state.xp + xpReward;
-        const newTrackXP = state[`${track}Xp`] + xpReward;
+        const newTrackXP = currentTrackXP + xpReward;
         const newLevel = Math.floor(newTotalXP / 100) + 1;
         const updatedModules = [...(state.completedModules || []), moduleId];
 
@@ -58,7 +63,7 @@ export const useStore = create<StoreState>()(
         set({
           completedModules: updatedModules,
           xp: newTotalXP,
-          [`${track}Xp`]: newTrackXP,
+          [trackKey]: newTrackXP,
           level: newLevel,
         });
       },
@@ -80,7 +85,7 @@ export const useStore = create<StoreState>()(
       resetSession: () => {
         if (typeof document !== "undefined")
           document.cookie = "user_xp=0; path=/; max-age=0; SameSite=Lax";
-        localStorage.removeItem("cs3-storage"); // Clears persistent Zustand cache entirely
+        localStorage.removeItem("cs3-storage");
         set({
           xp: 0,
           csXp: 0,
@@ -116,7 +121,7 @@ export const useStore = create<StoreState>()(
     }),
     {
       name: "cs3-storage",
-      version: 2, // Bumped to 2 for SWE track migration
+      version: 2,
       migrate: (persistedState: any, version: number) => {
         if (version === 0) {
           persistedState.csXp = persistedState.xp || 0;
