@@ -54,6 +54,13 @@ const ROUTE_XP_REQUIREMENTS: Record<string, { minXP: number; track: TrackXP }> =
     // --- CYBER TRACK ---
     "/cyber/cryptography": { minXP: 0, track: "cyberXp" },
     "/cyber/network-analysis": { minXP: 150, track: "cyberXp" },
+    "/cyber/mobile-sec": { minXP: 350, track: "cyberXp" },
+    "/cyber/iam": { minXP: 600, track: "cyberXp" },
+    "/cyber/forensics": { minXP: 850, track: "cyberXp" },
+    "/cyber/pentesting": { minXP: 1100, track: "cyberXp" },
+    "/cyber/malware": { minXP: 1400, track: "cyberXp" },
+    "/cyber/threat-intel": { minXP: 1700, track: "cyberXp" },
+    "/cyber/ml-defense": { minXP: 2000, track: "cyberXp" },
   };
 
 export default function GlobalRouteGuard({

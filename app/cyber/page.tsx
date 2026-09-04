@@ -42,25 +42,25 @@ const MODULES = [
     id: "pentest",
     title: "07. Penetration Testing",
     path: "/cyber/pentesting",
-    reqXp: 1400,
+    reqXp: 1350,
   },
   {
     id: "malware",
     title: "08. Malware Analysis",
     path: "/cyber/malware",
-    reqXp: 1700,
+    reqXp: 1650,
   },
   {
     id: "threat",
     title: "09. Threat Intel & Honeypots",
     path: "/cyber/threat-intel",
-    reqXp: 2000,
+    reqXp: 1950,
   },
   {
     id: "mlcyber",
     title: "10. ML in Cybersecurity",
     path: "/cyber/ml-defense",
-    reqXp: 2300,
+    reqXp: 2250,
   },
 ];
 

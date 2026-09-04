@@ -1,17 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStore, Track } from "@/store/useStore";
-// Add 'Component' here!
+import confetti from "canvas-confetti";
 import {
   Brain,
   Code2,
   Shield,
   Component,
-  CheckCircle,
-  XCircle,
   ArrowRight,
   RotateCcw,
 } from "lucide-react";
@@ -52,6 +50,32 @@ export default function QuizEngine({
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [isShake, setIsShake] = useState(false);
+
+  // 1. Audio Cache: Reuses single audio instances to prevent memory leaks
+  const soundsRef = useRef<{ [key: string]: HTMLAudioElement }>({});
+
+  useEffect(() => {
+    soundsRef.current = {
+      click: new Audio("/sounds/click.mp3"),
+      correct: new Audio("/sounds/correct.mp3"),
+      wrong: new Audio("/sounds/wrong.mp3"),
+    };
+
+    // Cleanup confetti canvas if user navigates away
+    return () => {
+      confetti.reset();
+    };
+  }, []);
+
+  const playSound = (type: "click" | "correct" | "wrong") => {
+    const audio = soundsRef.current[type];
+    if (audio) {
+      audio.currentTime = 0; // Rewind to start immediately
+      audio.volume = type === "correct" ? 0.6 : 0.4;
+      audio.play().catch(() => {});
+    }
+  };
 
   // Dynamic Theme Mapping
   const theme = {
@@ -62,6 +86,7 @@ export default function QuizEngine({
       hover: "hover:bg-blue-500",
       border: "border-blue-500",
       Icon: Code2,
+      confetti: ["#3b82f6", "#06b6d4"],
     },
     ai: {
       color: "purple",
@@ -70,6 +95,7 @@ export default function QuizEngine({
       hover: "hover:bg-purple-500",
       border: "border-purple-500",
       Icon: Brain,
+      confetti: ["#a855f7", "#c084fc"],
     },
     cyber: {
       color: "emerald",
@@ -78,6 +104,7 @@ export default function QuizEngine({
       hover: "hover:bg-emerald-500",
       border: "border-emerald-500",
       Icon: Shield,
+      confetti: ["#10b981", "#34d399"],
     },
     swe: {
       color: "amber",
@@ -86,15 +113,39 @@ export default function QuizEngine({
       hover: "hover:bg-amber-500",
       border: "border-amber-500",
       Icon: Component,
+      confetti: ["#f59e0b", "#fbbf24"],
     },
   }[track];
 
   const Icon = theme.Icon;
   const currentQ = questions[currentIndex];
 
+  // 2. High-performance Confetti (50 particles, 80 ticks = ~1 second burst, then auto-cleans)
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      ticks: 80, // Ends physics loop 60% faster
+      origin: { y: 0.7 },
+      colors: theme.confetti,
+      disableForReducedMotion: true,
+    });
+  };
+
   const checkAnswer = () => {
     if (selectedOption === null) return;
-    if (selectedOption === currentQ.correctAnswer) setScore((s) => s + 1);
+
+    const isCorrect = selectedOption === currentQ.correctAnswer;
+
+    if (isCorrect) {
+      setScore((s) => s + 1);
+      playSound("correct");
+    } else {
+      playSound("wrong");
+      setIsShake(true);
+      setTimeout(() => setIsShake(false), 400);
+    }
+
     setIsAnswerChecked(true);
   };
 
@@ -108,13 +159,17 @@ export default function QuizEngine({
       const finalScore =
         score + (selectedOption === currentQ.correctAnswer ? 1 : 0);
 
-      if (finalScore >= passingScore && !isAlreadyCompleted) {
-        completeModule(moduleId, xpReward, track);
+      if (finalScore >= passingScore) {
+        triggerConfetti();
+        if (!isAlreadyCompleted) {
+          completeModule(moduleId, xpReward, track);
+        }
       }
     }
   };
 
   const handleRetake = () => {
+    confetti.reset();
     setCurrentIndex(0);
     setSelectedOption(null);
     setIsAnswerChecked(false);
@@ -142,7 +197,9 @@ export default function QuizEngine({
                 XP already claimed previously.
               </p>
             ) : (
-              <p className={`mb-8 font-bold ${theme.text}`}>
+              <p
+                className={`mb-8 font-bold ${theme.text} text-xl animate-bounce`}
+              >
                 +{xpReward} {track.toUpperCase()} XP Awarded!
               </p>
             )
@@ -164,7 +221,7 @@ export default function QuizEngine({
             {passed && nextModulePath && (
               <Link
                 href={nextModulePath}
-                className={`block w-full rounded-lg py-3 font-bold text-white transition ${theme.bg} ${theme.hover}`}
+                className={`block w-full rounded-lg py-3 font-bold text-white transition ${theme.bg} ${theme.hover} shadow-lg`}
               >
                 Next Module →
               </Link>
@@ -194,7 +251,13 @@ export default function QuizEngine({
           </p>
         </div>
 
-        <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
+        <div
+          className={`mb-6 rounded-2xl border p-8 transition-all duration-300 ${
+            isShake
+              ? "animate-shake border-rose-500 bg-rose-950/20 shadow-[0_0_30px_rgba(244,63,94,0.2)]"
+              : "border-slate-800 bg-slate-900 shadow-xl"
+          }`}
+        >
           <h2 className="mb-8 text-xl font-bold text-white leading-relaxed">
             {currentQ.question}
           </h2>
@@ -225,7 +288,10 @@ export default function QuizEngine({
                 <button
                   key={index}
                   disabled={isAnswerChecked}
-                  onClick={() => setSelectedOption(index)}
+                  onClick={() => {
+                    setSelectedOption(index);
+                    playSound("click");
+                  }}
                   className={btnClass}
                 >
                   {option}
@@ -238,7 +304,11 @@ export default function QuizEngine({
         <div className="flex items-center justify-between border-t border-slate-800 pt-6">
           {isAnswerChecked ? (
             <span
-              className={`font-bold ${selectedOption === currentQ.correctAnswer ? "text-emerald-400" : "text-rose-400"}`}
+              className={`font-bold ${
+                selectedOption === currentQ.correctAnswer
+                  ? "text-emerald-400"
+                  : "text-rose-400"
+              }`}
             >
               {selectedOption === currentQ.correctAnswer
                 ? "Correct!"

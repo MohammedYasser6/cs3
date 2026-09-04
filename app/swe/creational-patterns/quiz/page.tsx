@@ -45,7 +45,7 @@ export default function CreationalQuizPage() {
       passingScore={2}
       questions={QUESTIONS}
       returnPath="/swe"
-      nextModulePath="/architecture-components" 
+      nextModulePath="/swe/architecture-components" 
     />
   );
 }
