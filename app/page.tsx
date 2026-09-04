@@ -22,8 +22,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col overflow-y-auto bg-slate-950 p-4 md:p-8 text-slate-200">
-      <div className="m-auto w-full max-w-5xl text-center py-12">
+    <div className="h-full min-h-screen w-full overflow-y-auto bg-slate-950 px-4 py-12 md:flex md:items-center md:justify-center md:p-8 text-slate-200">
+      <div className="mx-auto w-full max-w-5xl text-center pb-24 md:pb-0">
         <div className="mb-6 flex flex-col items-center justify-center animate-fade-in">
           <svg
             width="64"
