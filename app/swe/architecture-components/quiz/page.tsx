@@ -44,7 +44,7 @@ export default function ArchitectureQuizPage() {
       xpReward={200}
       passingScore={2}
       questions={QUESTIONS}
-      returnPath="/swe"
+      returnPath="/swe/microservices"
       nextModulePath=""
     />
   );
