@@ -22,8 +22,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 p-8 text-slate-200">
-      <div className="mx-auto max-w-5xl text-center">
+    <div className="flex min-h-screen flex-col overflow-y-auto bg-slate-950 p-4 md:p-8 text-slate-200">
+      <div className="m-auto w-full max-w-5xl text-center py-12">
         <div className="mb-6 flex flex-col items-center justify-center animate-fade-in">
           <svg
             width="64"
@@ -40,23 +40,23 @@ export default function HomePage() {
             <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
             <line x1="12" y1="22.08" x2="12" y2="12" />
           </svg>
-          <h1 className="text-6xl font-black text-white tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight">
             Welcome to CS<span className="text-cyan-500">³</span>
           </h1>
         </div>
 
         <div className="mb-12 flex flex-col md:flex-row items-center justify-center gap-4 animate-slide-up">
-          <div className="flex items-center gap-2 rounded-full border border-blue-900/50 bg-blue-950/30 px-6 py-2 text-blue-400">
+          <div className="flex w-full md:w-auto items-center justify-center gap-2 rounded-full border border-blue-900/50 bg-blue-950/30 px-6 py-2 text-blue-400">
             <BookOpen className="h-4 w-4" />
             <span className="font-bold tracking-wide">THEORY</span>
           </div>
           <div className="hidden h-px w-8 bg-slate-800 md:block" />
-          <div className="flex items-center gap-2 rounded-full border border-purple-900/50 bg-purple-950/30 px-6 py-2 text-purple-400">
+          <div className="flex w-full md:w-auto items-center justify-center gap-2 rounded-full border border-purple-900/50 bg-purple-950/30 px-6 py-2 text-purple-400">
             <TerminalSquare className="h-4 w-4" />
             <span className="font-bold tracking-wide">IMPLEMENTATION</span>
           </div>
           <div className="hidden h-px w-8 bg-slate-800 md:block" />
-          <div className="flex items-center gap-2 rounded-full border border-emerald-900/50 bg-emerald-950/30 px-6 py-2 text-emerald-400">
+          <div className="flex w-full md:w-auto items-center justify-center gap-2 rounded-full border border-emerald-900/50 bg-emerald-950/30 px-6 py-2 text-emerald-400">
             <AreaChart className="h-4 w-4" />
             <span className="font-bold tracking-wide">VISUALIZATION</span>
           </div>
